@@ -114,17 +114,17 @@ def etl_products(filepath: str) -> object:
     df_products['product_name_lenght'] = df_products[
         'product_name_lenght'].astype('int64')
     df_products['product_description_lenght'] = df_products[
-        'product_name_lenght'].astype('int64')
+        'product_description_lenght'].astype('int64')
     df_products['product_photos_qty'] = df_products[
-        'product_name_lenght'].astype('int64')
+        'product_photos_qty'].astype('int64')
     df_products['product_weight_g'] = df_products[
-        'product_name_lenght'].astype('int64')
+        'product_weight_g'].astype('int64')
     df_products['product_length_cm'] = df_products[
-        'product_name_lenght'].astype('int64')
+        'product_length_cm'].astype('int64')
     df_products['product_height_cm'] = df_products[
-        'product_name_lenght'].astype('int64')
+        'product_height_cm].astype('int64')
     df_products['product_width_cm'] = df_products[
-        'product_name_lenght'].astype('int64')
+        'product_width_cm'].astype('int64')
 
     return df_products
 
