@@ -14,7 +14,27 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
+from logsetup import log_setup
 
+logger = log_setup.logging.getLogger(__name__)
+logger_r = log_setup.logging.getLogger('result')
+
+def send_file(path:str) -> str :
+    """Send csv files interact with FastAPI endpoint.
+
+    Args:
+        path (str): Path to csv folder directory
+    """
+    url = "http://127.0.0.1:8000/uploadfile"
+    files = {'file': open(path, 'rb')}
+    try:
+        res = requests.post(url, files=files)
+    except requests.RequestException as e:
+        logger.error("OOPS!! General Error")
+        logger.error(str(e))
+    finally:
+        logger_r.info("Always executed complete")
+        
 def save_file():
     data = uploaded_file.getvalue().decode('utf-8')
     parent_path = pathlib.Path(__file__).parent.parent.resolve()           
@@ -23,7 +43,10 @@ def save_file():
 
     with open(complete_name, "w", encoding="utf-8") as destination_file:
         destination_file.write(data)
-
+        
+    #Send file to server
+    send_file(complete_name)
+    logger_r.info("Upload data and send csv file completed")
     return save_path
 
 
