@@ -110,7 +110,7 @@ def etl_products(filepath: str) -> object:
     """
 
     df_products = pd.read_csv(filepath)
-    df_products.dropna(inplace=True)
+    df_products.fillna('-1', inplace=True)
     df_products['product_name_lenght'] = df_products[
         'product_name_lenght'].astype('int64')
     df_products['product_description_lenght'] = df_products[
