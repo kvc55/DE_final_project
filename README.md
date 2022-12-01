@@ -8,6 +8,6 @@
 `uvicorn api:app --reload`
 
 ## (Streamlit) Correr el servidor local: 
-`cd page` (para entrar a la carpeta donde se encuentra el archivo.)
+`cd page` (para entrar a la carpeta donde se encuentra el archivo.)\
 `streamlit run main_page.py`
 
