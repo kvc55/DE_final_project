@@ -4,6 +4,7 @@ import requests
 from os import listdir
 from os.path import isfile, join
 
+
 import pandas as pd
 import streamlit as st
 from pandas.api.types import (
@@ -13,28 +14,16 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
-def send_file(path:str) -> str :
-    url = "http://127.0.0.1:8000/uploadfile"
-    files = {'file': open(path, 'rb')}
-    try:
-        res = requests.post(url, files=files)
-    except requests.RequestException as e:
-         print("OOPS!! General Error")
-         print(str(e))
-    finally:
-        return "Send file csv"
 
 def save_file():
     data = uploaded_file.getvalue().decode('utf-8')
     parent_path = pathlib.Path(__file__).parent.parent.resolve()           
     save_path = os.path.join(parent_path, "data")
     complete_name = os.path.join(save_path, uploaded_file.name)
-    destination_file = open(complete_name, "w")
-    destination_file.write(data)
-    destination_file.close()
-    print(complete_name)
-    #send file to server
-    send_file(complete_name)
+
+    with open(complete_name, "w", encoding="utf-8") as destination_file:
+        destination_file.write(data)
+
     return save_path
 
 
@@ -54,6 +43,9 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Filtered dataframe
     """
+    
+    st.write(file_location)
+
     modify = st.checkbox("Add filters")
 
     if not modify:
@@ -61,7 +53,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
 
-    # Try to convert datetimes into a standard format (datetime, no timezone)
+    # Try to convert datetimes into a standard format (datetime)
     for col in df.columns:
         if is_object_dtype(df[col]):
             try:
@@ -123,9 +115,6 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 
 
-
-
-
 st.title("PRISMA")
 
 st.write(
@@ -139,8 +128,7 @@ if uploaded_file is not None:
   data_path = save_file()
   file_location = select_file(data_path)
 
-
-  df = pd.read_csv(file_location)
+  df = pd.read_csv(file_location, encoding = 'unicode_escape')
 
   st.dataframe(filter_dataframe(df))
 
