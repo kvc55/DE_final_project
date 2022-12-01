@@ -36,7 +36,7 @@ SET default_table_access_method = heap;
 -- Name: CUSTOMER; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."CUSTOMER" (
+CREATE TABLE public."customers" (
     customer_id character varying(32) NOT NULL,
     customer_zip_code_prefix integer NOT NULL,
     customer_city character varying(32) NOT NULL,
@@ -44,13 +44,13 @@ CREATE TABLE public."CUSTOMER" (
 );
 
 
-ALTER TABLE public."CUSTOMER" OWNER TO postgres;
+ALTER TABLE public."customers" OWNER TO postgres;
 
 --
 -- Name: GEOLOCATION; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."GEOLOCATION" (
+CREATE TABLE public."geolocation" (
     geolocation_zip_code_prefix integer NOT NULL,
     geolocation_lat double precision NOT NULL,
     geolocation_lng double precision NOT NULL,
@@ -59,13 +59,13 @@ CREATE TABLE public."GEOLOCATION" (
 );
 
 
-ALTER TABLE public."GEOLOCATION" OWNER TO postgres;
+ALTER TABLE public."geolocation" OWNER TO postgres;
 
 --
 -- Name: ORDERS; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."ORDERS" (
+CREATE TABLE public."orders" (
     order_id character varying(32) NOT NULL,
     customer_id character varying(32) NOT NULL,
     order_status character varying(11) NOT NULL,
@@ -77,13 +77,13 @@ CREATE TABLE public."ORDERS" (
 );
 
 
-ALTER TABLE public."ORDERS" OWNER TO postgres;
+ALTER TABLE public."orders" OWNER TO postgres;
 
 --
 -- Name: ORDER_ITEMS; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."ORDER_ITEMS" (
+CREATE TABLE public."order_items" (
     order_id character varying(32) NOT NULL,
     product_id character varying(32) NOT NULL,
     seller_id character varying(32) NOT NULL,
@@ -93,13 +93,13 @@ CREATE TABLE public."ORDER_ITEMS" (
 );
 
 
-ALTER TABLE public."ORDER_ITEMS" OWNER TO postgres;
+ALTER TABLE public."order_items" OWNER TO postgres;
 
 --
 -- Name: ORDER_PAYMENTS; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."ORDER_PAYMENTS" (
+CREATE TABLE public."order_payments" (
     order_id character varying(32) NOT NULL,
     payment_type character varying(32) NOT NULL,
     payment_installments smallint,
@@ -107,13 +107,13 @@ CREATE TABLE public."ORDER_PAYMENTS" (
 );
 
 
-ALTER TABLE public."ORDER_PAYMENTS" OWNER TO postgres;
+ALTER TABLE public."order_payments" OWNER TO postgres;
 
 --
 -- Name: ORDER_REVIEWS; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."ORDER_REVIEWS" (
+CREATE TABLE public."order_reviews" (
     review_id character varying(32) NOT NULL,
     order_id character varying(32) NOT NULL,
     review_score smallint,
@@ -123,13 +123,13 @@ CREATE TABLE public."ORDER_REVIEWS" (
 );
 
 
-ALTER TABLE public."ORDER_REVIEWS" OWNER TO postgres;
+ALTER TABLE public."order_reviews" OWNER TO postgres;
 
 --
 -- Name: PRODUCTS; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."PRODUCTS" (
+CREATE TABLE public."products" (
     product_id character varying(32) NOT NULL,
     product_category_name character varying(46) NOT NULL,
     product_name_lenght smallint NOT NULL,
@@ -142,13 +142,13 @@ CREATE TABLE public."PRODUCTS" (
 );
 
 
-ALTER TABLE public."PRODUCTS" OWNER TO postgres;
+ALTER TABLE public."products" OWNER TO postgres;
 
 --
 -- Name: SELLERS; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."SELLERS" (
+CREATE TABLE public."sellers" (
     seller_id character varying(32) NOT NULL,
     seller_zip_code_prefix integer NOT NULL,
     seller_city character varying(40) NOT NULL,
@@ -156,78 +156,78 @@ CREATE TABLE public."SELLERS" (
 );
 
 
-ALTER TABLE public."SELLERS" OWNER TO postgres;
+ALTER TABLE public."sellers" OWNER TO postgres;
 
 --
 -- Name: CUSTOMER CUSTOMER_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."CUSTOMER"
-    ADD CONSTRAINT "CUSTOMER_pkey" PRIMARY KEY (customer_id);
+ALTER TABLE ONLY public."customers"
+    ADD CONSTRAINT "customer_pkey" PRIMARY KEY (customer_id);
 
 
 --
 -- Name: ORDERS ORDERS_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."ORDERS"
-    ADD CONSTRAINT "ORDERS_pkey" PRIMARY KEY (order_id);
+ALTER TABLE ONLY public."orders"
+    ADD CONSTRAINT "orders_pkey" PRIMARY KEY (order_id);
 
 
 --
 -- Name: PRODUCTS PRODUCTS_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."PRODUCTS"
-    ADD CONSTRAINT "PRODUCTS_pkey" PRIMARY KEY (product_id);
+ALTER TABLE ONLY public."products"
+    ADD CONSTRAINT "products_pkey" PRIMARY KEY (product_id);
 
 
 --
 -- Name: SELLERS SELLERS_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."SELLERS"
-    ADD CONSTRAINT "SELLERS_pkey" PRIMARY KEY (seller_id);
+ALTER TABLE ONLY public."sellers"
+    ADD CONSTRAINT "sellers_pkey" PRIMARY KEY (seller_id);
 
 
 --
 -- Name: ORDERS fk_customer; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."ORDERS"
-    ADD CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES public."CUSTOMER"(customer_id);
+ALTER TABLE ONLY public."orders"
+    ADD CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES public."customers"(customer_id);
 
 
 --
 -- Name: ORDER_ITEMS fk_order; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."ORDER_ITEMS"
-    ADD CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES public."ORDERS"(order_id);
+ALTER TABLE ONLY public."order_items"
+    ADD CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES public."orders"(order_id);
 
 
 --
 -- Name: ORDER_PAYMENTS fk_order; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."ORDER_PAYMENTS"
-    ADD CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES public."ORDERS"(order_id);
+ALTER TABLE ONLY public."order_payments"
+    ADD CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES public."orders"(order_id);
 
 
 --
 -- Name: ORDER_REVIEWS fk_order; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."ORDER_REVIEWS"
-    ADD CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES public."ORDERS"(order_id);
+ALTER TABLE ONLY public."order_reviews"
+    ADD CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES public."orders"(order_id);
 
 
 --
 -- Name: ORDER_ITEMS fk_product; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."ORDER_ITEMS"
-    ADD CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES public."PRODUCTS"(product_id);
+ALTER TABLE ONLY public."order_items"
+    ADD CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES public."products"(product_id);
 
 
 --
@@ -235,8 +235,8 @@ ALTER TABLE ONLY public."ORDER_ITEMS"
 -- Name: ORDER_ITEMS fk_seller; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."ORDER_ITEMS"
-    ADD CONSTRAINT fk_seller FOREIGN KEY (seller_id) REFERENCES public."SELLERS"(seller_id);
+ALTER TABLE ONLY public."order_items"
+    ADD CONSTRAINT fk_seller FOREIGN KEY (seller_id) REFERENCES public."sellers"(seller_id);
 
 
 
