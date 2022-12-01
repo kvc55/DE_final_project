@@ -55,6 +55,9 @@ class Database():
         :return: True value if ended successfully , False in case that fails
         :rtype: bool
         """
+
+        # Replace dataframe index by the first column
+        dfname = dfname.set_index(dfname.columns[0])
         try:
             with self.engine.begin() as connection:
                 dfname.to_sql(t_name, con=connection, if_exists='append')
