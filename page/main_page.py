@@ -76,11 +76,11 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     with modification_container:
         to_filter_columns = st.multiselect("Filter dataframe on", df.columns)
-        #print(to_filter_columns)
+        
         for column in to_filter_columns:
-            left, right = st.columns((1, 20)) #no entiendo
+            left, right = st.columns((1, 20)) # needs review
             left.write("↳")
-            # Treat columns with < 10 unique values as categorical ---> reveer el tema de las ciudades
+            # Treat columns with < 10 unique values as categorical ---> review cities
             if is_categorical_dtype(df[column]) or df[column].nunique() < 10:
                 user_cat_input = right.multiselect(
                     f"Values for {column}",
@@ -91,7 +91,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
             elif is_numeric_dtype(df[column]):
                 _min = float(df[column].min())
                 _max = float(df[column].max())
-                step = (_max - _min) / 100 # ------> mmmm reveer, no sera porque tenia 100 filas??
+                step = (_max - _min) / 100 # ------> review
                 user_num_input = right.slider(
                     f"Values for {column}",
                     _min,
