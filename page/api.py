@@ -13,7 +13,7 @@ logging.basicConfig(
 app = FastAPI()
 
 
-# API ROUTES #
+# API ROUTES
 @app.post("/uploadfile")
 async def create_upload_file(file: UploadFile):
     '''create_upload_file: a file is uploaded and saved to the relative folder directory.
@@ -26,12 +26,12 @@ async def create_upload_file(file: UploadFile):
     '''
 
     try:
-        folder = './data'
+        folder = '../data'
         # Create folder if it doesn't exist.
         if not os.path.isdir(folder):
             os.mkdir(folder)
 
-        file_location = f"../{folder}/{file.filename}" # Save to the 'data' folder.
+        file_location = f"{folder}/{file.filename}" # Save to the 'data' folder.
         with open(file_location, "wb+") as file_object:
             file_object.write(file.file.read())
 
@@ -40,3 +40,4 @@ async def create_upload_file(file: UploadFile):
 
     except Exception as e:
         logging.error({"info": f"file '{file.filename}' has not been saved at '{file_location}'. Full error: '{e}'"})
+        return e
