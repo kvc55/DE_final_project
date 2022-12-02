@@ -15,6 +15,40 @@ logger = log_setup.logging.getLogger(__name__)
 logger_r = log_setup.logging.getLogger('result')
 
 
+def send_file(path: str) -> str:
+    """Send csv files interact with FastAPI endpoint.
+
+    :param path: Path to csv folder directory
+    :type path: str
+    """
+    url = "http://127.0.0.1:8000/uploadfile"
+    files = {'file': open(path, 'rb')}
+    try:
+        res = requests.post(url, files=files)
+    except requests.RequestException as e:
+        logger.error("OOPS!! General Error")
+        logger.error(str(e))
+    finally:
+        logger_r.info("Always executed complete")
+        
+def receive_csv_info(file_name: str) -> str:
+    """Get dataset info from FastAPI endpoint.
+
+    :param file_name: File name to get info
+    :type file_name: str
+    :return: Dataset information
+    :rtype: str
+    """
+    url = f'http://localhost:8000/data/{file_name}'
+    try:
+        resp=requests.get(url)
+        return resp.text
+    except requests.RequestException as e:
+        logger.error("OOPS!! General Error")
+        logger.error(str(e))
+    finally:
+        logger_r.info("Always executed complete")
+
 def add_logo(logo_url: str) -> None:
     """Add a logo (from logo_url) on the top of the sidebar.
 
@@ -37,40 +71,6 @@ def add_logo(logo_url: str) -> None:
         """,
         unsafe_allow_html=True,
     )
-
-def send_file(path: str) -> str:
-    """Send csv files interact with FastAPI endpoint.
-
-    Args:
-        path (str): Path to csv folder directory
-    """
-    url = "http://127.0.0.1:8000/uploadfile"
-    files = {'file': open(path, 'rb')}
-    try:
-        res = requests.post(url, files=files)
-        print('ok')
-    except requests.RequestException as e:
-        logger.error("OOPS!! General Error")
-        logger.error(str(e))
-    finally:
-        logger_r.info("Always executed complete")
-        
-def receive_csv_info(file_name: str) -> str:
-    """Get dataset info from FastAPI endpoint.
-
-    Returns:
-        class: dataset information
-    """
-    url = f'http://localhost:8000/data/{file_name}'
-    try:
-        resp=requests.get(url)
-        print(resp.text)
-        return resp.text
-    except requests.RequestException as e:
-        logger.error("OOPS!! General Error")
-        logger.error(str(e))
-    finally:
-        logger_r.info("Always executed complete")
         
 def save_file() -> str:
     """Saves the uploaded .csv file locally.
@@ -169,7 +169,7 @@ def save_filtered_df(df: pd.DataFrame) -> None:
         st.sidebar.download_button(
             label="Download",
             data=csv,
-            file_name='large_df.csv',
+            file_name='filtered.csv',
             mime='text/csv',
         )
 
@@ -193,23 +193,19 @@ if uploaded_file is not None:
   data_path = save_file()
   file_location = select_file(data_path)
   df = pd.read_csv(file_location)
+    
+  # Button display dataset info
+  if st.button('Resume dataset'):
+    dataset_info = receive_csv_info(uploaded_file.name)
+    st.text(dataset_info)
+  else:
+    st.sidebar.write('Received info complete')
 
   # Operations that the user can apply 
   filtered_df = filter_dataframe(df)
   st.dataframe(filtered_df, use_container_width=True)
 
   save_filtered_df(filtered_df)
-
-  # Button display dataset info
-  st.sidebar.markdown(
-    """**Show dataset information**
-    """
-  )
-  if st.sidebar.button('Ask'):
-    dataset_info = receive_csv_info(uploaded_file.name)
-    st.text(dataset_info)
-  else:
-    st.sidebar.write('Received info complete')
   
 
  
