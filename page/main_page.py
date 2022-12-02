@@ -20,11 +20,11 @@ from logsetup import log_setup
 logger = log_setup.logging.getLogger(__name__)
 logger_r = log_setup.logging.getLogger('result')
 
-def send_file(path: str) -> str:
-    """Send csv files interact with FastAPI endpoint.
+def send_file(path: str):
+    """Send .csv files interact with FastAPI endpoint.
 
-    Args:
-        path (str): Path to csv folder directory
+    :param path: Path to csv folder directory
+    :type path: str
     """
     url = "http://127.0.0.1:8000/uploadfile"
     files = {'file': open(path, 'rb')}
@@ -36,15 +36,18 @@ def send_file(path: str) -> str:
     finally:
         logger_r.info("Always executed complete")
         
-def receive_csv_info(file_name: str)  -> str:
+def receive_csv_info(file_name: str) -> str:
     """Get dataset info from FastAPI endpoint.
 
-    Returns:
-        class: dataset information
+    :param file_name: File name to get info
+    :type file_name: str
+    :return: Dataset information
+    :rtype: str
     """
     url = f'http://localhost:8000/data/{file_name}'
     try:
         resp=requests.get(url)
+        return resp.text
     except requests.RequestException as e:
         logger.error("OOPS!! General Error")
         logger.error(str(e))
@@ -238,7 +241,7 @@ if uploaded_file is not None:
   df = pd.read_csv(file_location)
   filtered_dataframe = st.dataframe(filter_dataframe(df))
     
-  #Button display dataset info
+  # Button display dataset info
   if st.button('Resume dataset'):
     dataset_info = receive_csv_info(uploaded_file.name)
     st.text(dataset_info)
