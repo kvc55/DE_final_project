@@ -1,8 +1,13 @@
-from fastapi import FastAPI, UploadFile
 import os
 import logging
+import pandas as pd
+import io
 
-# LOGGING CONFIG
+from fastapi import FastAPI, UploadFile
+from fastapi.responses import FileResponse
+
+
+# Logging config
 logging.basicConfig(
     level= logging.INFO,
     filename='result.log',
@@ -12,8 +17,7 @@ logging.basicConfig(
 
 app = FastAPI()
 
-
-# API ROUTES
+# UPLOAD FILE
 @app.post("/uploadfile")
 async def create_upload_file(file: UploadFile):
     '''create_upload_file: a file is uploaded and saved to the relative folder directory.
@@ -27,17 +31,48 @@ async def create_upload_file(file: UploadFile):
 
     try:
         folder = '../data'
-        # Create folder if it doesn't exist.
-        if not os.path.isdir(folder):
-            os.mkdir(folder)
+        create_or_exists(folder)
 
         file_location = f"{folder}/{file.filename}" # Save to the 'data' folder.
         with open(file_location, "wb+") as file_object:
             file_object.write(file.file.read())
-
         logging.info({"info": f"file '{file.filename}' saved at '{file_location}'"})
         return True
 
     except Exception as e:
-        logging.error({"info": f"file '{file.filename}' has not been saved at '{file_location}'. Full error: '{e}'"})
-        return e
+        logging.error({"Error:": f"file '{file.filename}' has not been saved at '{file_location}'. Full error: '{e}'"})
+
+# READ FILE
+@app.get("/data/{file_name}")
+async def read_select_dataset(file_name: str):
+    try:
+        folder = '../data'
+        folder_temp = '../temp'
+        # Create folders or check if they already exist..
+        create_or_exists(folder)
+        create_or_exists(folder_temp)
+
+        file_path = f"{folder_temp}/info.txt"
+        file_location = f"{folder}/{file_name}"
+        
+        df = pd.read_csv(file_location)
+        
+        buffer = io.StringIO()
+        df.info(buf=buffer, verbose=True)
+        
+        buffer_value = buffer.getvalue()
+        with open(file_path, "w",encoding="utf-8") as f:  
+            f.write(buffer_value)
+
+        return FileResponse(path=file_path, filename=file_path, media_type='text')
+    
+    except Exception as e:
+        logging.error({"Error:": f"failed to read file. Full error: {e}"})
+
+# SPECIFIC METHODS
+def create_or_exists(folder):
+    # Create folder if it doesn't exist.
+    if not os.path.isdir(folder):
+        os.mkdir(folder)
+
+#http://localhost:8000/data/olist_products_dataset.csv

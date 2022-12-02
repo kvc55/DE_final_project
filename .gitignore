@@ -131,3 +131,6 @@ dmypy.json
 
 # Ignore data folder.
 data
+
+# Ignore temp folder.
+temp
