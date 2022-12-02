@@ -14,9 +14,8 @@ from logsetup import log_setup
 logger = log_setup.logging.getLogger(__name__)
 logger_r = log_setup.logging.getLogger('result')
 
-
-def send_file(path: str) -> str:
-    """Send csv files interact with FastAPI endpoint.
+def send_file(path: str):
+    """Send .csv files interact with FastAPI endpoint.
 
     :param path: Path to csv folder directory
     :type path: str
