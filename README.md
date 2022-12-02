@@ -1,19 +1,19 @@
-# Instalación
-## Activar venv:
-`source bin/activate` (en Ubuntu)
+Installation
+## Activate venv:
+`source bin/activate` (in Ubuntu)
 
-## Instalar requerimientos:
+## Install requirements:
 `pip install -r requirements.txt`
 
 <br>
 
-# Ejecución
-### Ingresar al directorio page: 
+# Execute
+### Move to the /page folder: 
 `cd page`
 
-### (FastAPI) Correr el servidor local: 
+### (FastAPI) Run in the local server: 
 `uvicorn api:app --reload`
 
-### (Streamlit) Correr el servidor local: 
+### (Streamlit) Run in the l: 
 `streamlit run main_page.py`
 
