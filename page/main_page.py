@@ -3,6 +3,7 @@ import pathlib
 import requests
 from os import listdir
 from os.path import isfile, join
+import base64
 
 
 import pandas as pd
@@ -14,12 +15,12 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
-from logsetup import log_setup
+#from logsetup import log_setup
 
-logger = log_setup.logging.getLogger(__name__)
-logger_r = log_setup.logging.getLogger('result')
+#logger = log_setup.logging.getLogger(__name__)
+#logger_r = log_setup.logging.getLogger('result')
 
-def send_file(path:str) -> str :
+def send_file(path: str) -> str :
     """Send csv files interact with FastAPI endpoint.
 
     Args:
@@ -30,10 +31,12 @@ def send_file(path:str) -> str :
     try:
         res = requests.post(url, files=files)
     except requests.RequestException as e:
-        logger.error("OOPS!! General Error")
-        logger.error(str(e))
+        #logger.error("OOPS!! General Error")
+        #logger.error(str(e))
+        pass
     finally:
-        logger_r.info("Always executed complete")
+        #logger_r.info("Always executed complete")
+        pass
         
 def save_file():
     data = uploaded_file.getvalue().decode('utf-8')
@@ -46,7 +49,7 @@ def save_file():
         
     #Send file to server
     send_file(complete_name)
-    logger_r.info("Upload data and send csv file completed")
+    #logger_r.info("Upload data and send csv file completed")
     return save_path
 
 
@@ -69,7 +72,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     
     st.write(file_location)
 
-    modify = st.checkbox("Add filters")
+    modify = st.sidebar.checkbox("Add filters")
 
     if not modify:
         return df
@@ -87,7 +90,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         if is_datetime64_any_dtype(df[col]):
             df[col] = df[col].dt.tz_localize(None)
 
-    modification_container = st.container()
+    modification_container = st.sidebar.container()
 
     with modification_container:
         to_filter_columns = st.multiselect("Filter dataframe on", df.columns)
@@ -129,30 +132,106 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
                     df = df.loc[df[column].between(start_date, end_date)]
             else:
                 user_text_input = right.text_input(
-                    f"Substring or regex in {column}",
+                    f"Substring in {column}",
                 )
                 if user_text_input:
                     df = df[df[column].str.contains(user_text_input)]
+        
+
+
+        want_drop_nulls = st.checkbox("Drop null values")
+
+        if want_drop_nulls:
+            to_drop_nulls = st.multiselect("Select columns", df.columns)
+
+            drop_button = st.button('Apply')
+            if drop_button:
+                df.dropna(subset=to_drop_nulls, inplace=True)
 
     return df
 
 
 
-st.title("PRISMA")
+def drop_nulls(df: pd.DataFrame) -> pd.DataFrame:
+    want_drop_nulls = st.sidebar.checkbox("Drop null values")
+    
+    if want_drop_nulls:
+        to_drop_nulls = st.sidebar.multiselect("Select columns", df.columns)
 
-st.write(
-    """Use this app to filter any dataframe you choose
+        drop_button = st.sidebar.button('Apply')
+        if drop_button:
+            df.dropna(subset=to_drop_nulls, inplace=True)
+
+    return df
+            
+#@st.cache(hash_funcs={st.delta_generator.DeltaGenerator: hash})
+@st.cache
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv(index=False).encode('utf-8')
+
+def save_filtered_df(df: pd.DataFrame) -> None:
+    save_filtered_df = st.sidebar.checkbox("Save results")
+    
+    if save_filtered_df:
+        csv = convert_df(df)
+        st.sidebar.download_button(
+            label="Download data as CSV",
+            data=csv,
+            file_name='large_df.csv',
+            mime='text/csv',
+        )
+
+
+
+
+def download_link(object_to_download, download_filename, download_link_text):
+
+    if isinstance(object_to_download,pd.DataFrame):
+        object_to_download = object_to_download.to_csv(index=True)
+
+    # some strings <-> bytes conversions necessary here
+    try:
+        # some strings <-> bytes conversions necessary here
+        b64 = base64.b64encode(object_to_download.encode()).decode()
+
+    except AttributeError as e:
+        b64 = base64.b64encode(object_to_download).decode()
+
+    return f'<a href="data:file/txt;base64,{b64}" download="{download_filename}">{download_link_text}</a>'
+
+def save_df(df):
+    if st.button('Download Dataframe as CSV'):
+        tmp_download_link = download_link(df, 'YOUR_DF.csv', 'Click here to download your data!')
+        st.markdown(tmp_download_link, unsafe_allow_html=True)
+
+
+
+
+
+st.title("TESSERACT")
+
+st.markdown(
+    """**Use this app to filter any dataframe you choose**
     """
 )
 
 
-uploaded_file = st.file_uploader("Choose a file")
+st.subheader('Choose a file')
+uploaded_file = st.file_uploader((''))
 if uploaded_file is not None:
   data_path = save_file()
   file_location = select_file(data_path)
+  
+  df = pd.read_csv(file_location)
+  
+  
+  filtered_dataframe = st.dataframe(filter_dataframe(df))
+  #st.write(type(filtered_dataframe))
+  #st.dataframe(drop_nulls(filtered_dataframe))
 
-  df = pd.read_csv(file_location, encoding = 'unicode_escape')
+  #save_filtered_df(filtered_dataframe)
 
-  st.dataframe(filter_dataframe(df))
+  #convert_df(filtered_dataframe)
 
-
+#save_df(df)
