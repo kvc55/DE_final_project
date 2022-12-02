@@ -28,7 +28,6 @@ async def create_upload_file(file: UploadFile):
     Returns:
         log: success or fail as a logger response.
     '''
-
     try:
         folder = '../data'
         create_or_exists(folder)
