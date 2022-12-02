@@ -15,12 +15,12 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
-#from logsetup import log_setup
+from logsetup import log_setup
 
-#logger = log_setup.logging.getLogger(__name__)
-#logger_r = log_setup.logging.getLogger('result')
+logger = log_setup.logging.getLogger(__name__)
+logger_r = log_setup.logging.getLogger('result')
 
-def send_file(path: str) -> str :
+def send_file(path: str) -> str:
     """Send csv files interact with FastAPI endpoint.
 
     Args:
@@ -31,12 +31,24 @@ def send_file(path: str) -> str :
     try:
         res = requests.post(url, files=files)
     except requests.RequestException as e:
-        #logger.error("OOPS!! General Error")
-        #logger.error(str(e))
-        pass
+        logger.error("OOPS!! General Error")
+        logger.error(str(e))
     finally:
-        #logger_r.info("Always executed complete")
-        pass
+        logger_r.info("Always executed complete")
+        
+def receive_csv_info(file_name: str)  -> str:
+    """Get dataset info from FastAPI endpoint.
+
+    Returns:
+        class: dataset information
+    """
+    try:
+        resp=requests.get(f'http://localhost:8000/data/{file_name}')
+    except requests.RequestException as e:
+        logger.error("OOPS!! General Error")
+        logger.error(str(e))
+    finally:
+        logger_r.info("Always executed complete")
         
 def save_file():
     data = uploaded_file.getvalue().decode('utf-8')
@@ -222,11 +234,16 @@ uploaded_file = st.file_uploader((''))
 if uploaded_file is not None:
   data_path = save_file()
   file_location = select_file(data_path)
-  
   df = pd.read_csv(file_location)
-  
-  
   filtered_dataframe = st.dataframe(filter_dataframe(df))
+    
+  #Button display dataset info
+  if st.button('Resume dataset'):
+    dataset_info = receive_csv_info(uploaded_file.name)
+    st.text(dataset_info)
+  else:
+    st.write('Received info complete')
+    
   #st.write(type(filtered_dataframe))
   #st.dataframe(drop_nulls(filtered_dataframe))
 
