@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse
 # Logging config
 logging.basicConfig(
     level= logging.INFO,
-    filename='result.log',
+    filename='../logs/result.log',
     filemode= 'a',
     datefmt= '%d - %b-%y %H:%M:%S',
     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -41,10 +41,18 @@ async def create_upload_file(file: UploadFile):
 
     except Exception as e:
         logging.error({"Error:": f"file '{file.filename}' has not been saved at '{file_location}'. Full error: '{e}'"})
+        return e
 
 # READ FILE
 @app.get("/data/{file_name}")
 async def read_select_dataset(file_name: str):
+    '''read_select_dataset: reads a selected file and converts it to data.
+    Args:
+        file_name (str): uploaded file to process.
+    Returns:
+        fileResponse: text file.
+    '''
+
     try:
         folder = '../data'
         folder_temp = '../temp'
@@ -59,8 +67,8 @@ async def read_select_dataset(file_name: str):
         
         buffer = io.StringIO()
         df.info(buf=buffer, verbose=True)
-        
         buffer_value = buffer.getvalue()
+
         with open(file_path, "w",encoding="utf-8") as f:  
             f.write(buffer_value)
 
@@ -74,5 +82,3 @@ def create_or_exists(folder):
     # Create folder if it doesn't exist.
     if not os.path.isdir(folder):
         os.mkdir(folder)
-
-#http://localhost:8000/data/olist_products_dataset.csv
