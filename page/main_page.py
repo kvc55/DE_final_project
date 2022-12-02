@@ -42,8 +42,9 @@ def receive_csv_info(file_name: str)  -> str:
     Returns:
         class: dataset information
     """
+    url = f'http://localhost:8000/data/{file_name}'
     try:
-        resp=requests.get(f'http://localhost:8000/data/{file_name}')
+        resp=requests.get(url)
     except requests.RequestException as e:
         logger.error("OOPS!! General Error")
         logger.error(str(e))
