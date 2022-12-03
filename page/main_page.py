@@ -1,18 +1,23 @@
 import os
 import pathlib
-import requests
 from os import listdir
 from os.path import isfile, join
 
+import requests
 import pandas as pd
 import streamlit as st
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
-
 from logsetup import log_setup
+
 
 logger = log_setup.logging.getLogger(__name__)
 logger_r = log_setup.logging.getLogger('result')
+
+
+# company's url logo
+URL = 'https://res.cloudinary.com/dqgvfwvst/image/upload/v1669991725/tesseract_kwvpou.jpg'
+
 
 def send_file(path: str):
     """Send .csv files interact with FastAPI endpoint.
@@ -20,16 +25,18 @@ def send_file(path: str):
     :param path: Path to csv folder directory
     :type path: str
     """
+
     url = "http://127.0.0.1:8000/uploadfile"
     files = {'file': open(path, 'rb')}
     try:
-        res = requests.post(url, files=files)
+        requests.post(url, files=files)
     except requests.RequestException as e:
         logger.error("OOPS!! General Error")
         logger.error(str(e))
     finally:
         logger_r.info("Always executed complete")
-        
+
+
 def receive_csv_info(file_name: str) -> str:
     """Get dataset info from FastAPI endpoint.
 
@@ -38,9 +45,10 @@ def receive_csv_info(file_name: str) -> str:
     :return: Dataset information
     :rtype: str
     """
+
     url = f'http://localhost:8000/data/{file_name}'
     try:
-        resp=requests.get(url)
+        resp = requests.get(url)
         return resp.text
     except requests.RequestException as e:
         logger.error("OOPS!! General Error")
@@ -48,14 +56,13 @@ def receive_csv_info(file_name: str) -> str:
     finally:
         logger_r.info("Always executed complete")
 
+
 def add_logo(logo_url: str) -> None:
     """Add a logo (from logo_url) on the top of the sidebar.
 
     :param logo_url: URL of the logo
     :type logo_url: str
-    """    
- 
-    #validators.url(logo_url)
+    """
 
     st.markdown(
         f"""
@@ -70,7 +77,8 @@ def add_logo(logo_url: str) -> None:
         """,
         unsafe_allow_html=True,
     )
-        
+
+
 def save_file() -> str:
     """Saves the uploaded .csv file locally.
 
@@ -78,17 +86,22 @@ def save_file() -> str:
     :rtype: str
     """
 
-    data = uploaded_file.getvalue().decode('utf-8')
-    parent_path = pathlib.Path(__file__).parent.parent.resolve()           
+    parent_path = pathlib.Path(__file__).parent.parent.resolve()
     save_path = os.path.join(parent_path, "data")
     complete_name = os.path.join(save_path, uploaded_file.name)
 
-    with open(complete_name, "w", encoding="utf-8") as destination_file:
-        destination_file.write(data)
-        
-    #Send file to server
+    try:
+        data = uploaded_file.getvalue().decode('utf-8')
+        with open(complete_name, "w", encoding="utf-8") as destination_file:
+            destination_file.write(data)
+    except OSError as e:
+        logger.error('Fail to save .csv file', e)
+    except Exception as e:
+        logger.error('Something went wrong', e)
+
+    # Emi put this in the try except block please
+    # Send file to server
     send_file(complete_name)
-    print(complete_name)
     logger_r.info("Upload data and send csv file completed")
 
     return save_path
@@ -119,11 +132,6 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     :rtype: pd.DataFrame
     """
 
-    modify = st.sidebar.checkbox("**Add filters**")
-
-    if not modify:
-        return df
-
     filter_container = st.sidebar.container()
 
     with filter_container:
@@ -140,7 +148,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     return filtered_df
 
-            
+
 @st.cache
 def convert_df(df: pd.DataFrame) -> bytes:
     """Converts dataframe to .csv file.
@@ -154,26 +162,8 @@ def convert_df(df: pd.DataFrame) -> bytes:
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv(index=False).encode('utf-8')
 
-def save_filtered_df(df: pd.DataFrame) -> None:
-    """Donwloads .csv file
 
-    :param df: Filtered dataframe
-    :type df: pd.DataFrame
-    """
-
-    save_filtered_df = st.sidebar.checkbox("Save results")
-    
-    if save_filtered_df:
-        csv = convert_df(df)
-        st.sidebar.download_button(
-            label="Download",
-            data=csv,
-            file_name='filtered.csv',
-            mime='text/csv',
-        )
-
-
-# Main page structure
+# MAIN PAGE STRUCTURE
 
 st.title("TESSERACT")
 
@@ -182,33 +172,50 @@ st.markdown(
     """
 )
 
-add_logo("https://res.cloudinary.com/dqgvfwvst/image/upload/v1669991725/tesseract_kwvpou.jpg")
+add_logo(URL)
 
 st.subheader('Choose a file')
 
 uploaded_file = st.file_uploader((''))
 # All tasks to be done when the user uploads a .csv file
 if uploaded_file is not None:
-  data_path = save_file()
-  file_location = select_file(data_path)
-  df = pd.read_csv(file_location)
-    
-  # Button display dataset info
-  if st.button('Resume dataset'):
-    dataset_info = receive_csv_info(uploaded_file.name)
-    st.text(dataset_info)
-  else:
-    st.sidebar.write('Received info complete')
+    data_path = save_file()
+    file_location = select_file(data_path)
 
-  # Operations that the user can apply 
-  filtered_df = filter_dataframe(df)
-  st.dataframe(filtered_df, use_container_width=True)
+    try:
+        df = pd.read_csv(file_location)
+    except FileNotFoundError as e:
+        logger.error("File doesn't exist", e)
+    except Exception as e:
+        logger.error('Something went wrong', e)
 
-  save_filtered_df(filtered_df)
-  
+    # Button display dataset info
+    st.sidebar.markdown(
+        """**Show dataset information**
+    """
+    )
+    if st.sidebar.button('Request'):
+        dataset_info = receive_csv_info(uploaded_file.name)
+        st.text(dataset_info)
+    else:
+        st.sidebar.write('Received info complete')
 
- 
-  
- 
-    
-  
+    # Filters the user can apply
+    modify = st.sidebar.checkbox("**Add filters**")
+    if modify:
+        filtered_df = filter_dataframe(df)
+        st.dataframe(filtered_df, use_container_width=True)
+    else:
+        st.dataframe(df, use_container_width=True)
+
+    # User can download filtered data
+    save_filtered_df = st.sidebar.checkbox("Save results")
+
+    if save_filtered_df:
+        csv = convert_df(df)
+        st.sidebar.download_button(
+            label="Download",
+            data=csv,
+            file_name='filtered_df.csv',
+            mime='text/csv',
+        )
