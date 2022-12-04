@@ -94,15 +94,12 @@ def save_file() -> str:
         data = uploaded_file.getvalue().decode('utf-8')
         with open(complete_name, "w", encoding="utf-8") as destination_file:
             destination_file.write(data)
+        send_file(complete_name)
+        logger_r.info("Upload file locally and send .csv completed")
     except OSError as e:
         logger.error('Fail to save .csv file', e)
     except Exception as e:
         logger.error('Something went wrong', e)
-
-    # Emi put this in the try except block please
-    # Send file to server
-    send_file(complete_name)
-    logger_r.info("Upload data and send csv file completed")
 
     return save_path
 
