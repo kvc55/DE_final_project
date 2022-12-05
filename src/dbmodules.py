@@ -28,7 +28,7 @@ class Database():
         # Create engine and connection
         try:
             self.engine = db.create_engine(f"postgresql://{self.user}:{self.password}@{self.host}/{self.dbname}")
-            connection = self.engine.connect()
+            self.connection = self.engine.connect()
             print("Db instance created")
         except Exception as b:
             print(f"Logged connection error {b}")
@@ -40,7 +40,7 @@ class Database():
         :type t_name: str
         """
         # Run selected query and print all the outputs
-        fetchQuery = connection.execute(f"SELECT * FROM {t_name}")
+        fetchQuery = self.connection.execute(f"SELECT * FROM {t_name}")
         for data in fetchQuery.fetchall():
             print(data)
         print("all rows returned")
