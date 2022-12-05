@@ -1,5 +1,6 @@
 import os
 import pathlib
+import sys
 from os import listdir
 from os.path import isfile, join
 
@@ -9,11 +10,11 @@ import streamlit as st
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
 # change to the script path
-scriptPath = os.path.realpath(os.path.dirname(sys.argv[0]))
+scriptPath = os.path.realpath(os.path.dirname('.'))
 os.chdir(scriptPath)
 
 # append the relative location to import setup logs
-sys.path.append("../logsetup")
+sys.path.append("./logsetup")
 
 import log_setup
 
@@ -94,7 +95,7 @@ def save_file() -> str:
     """
 
     parent_path = pathlib.Path(__file__).parent.parent.resolve()
-    save_path = os.path.join(parent_path, "data")
+    save_path = os.path.join(parent_path, "../data")
     complete_name = os.path.join(save_path, uploaded_file.name)
 
     try:
