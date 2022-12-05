@@ -65,3 +65,66 @@ class Database():
         except Exception as a:
             print(f"Error logged {a}")
             return False
+
+
+    def fetchByQuery(self, query: str) -> None:
+        """fetchByQuery Method to print all the rows from a specific query
+
+        :param query: query in sql sintax 
+        :type t_name: str
+        """
+        # Run selected query and print all the outputs
+        fetchQuery = self.connection.execute(query)
+        for data in fetchQuery.fetchall():
+            print(data)
+        print("all rows returned")
+
+
+    def dinorderquery(self, query : str,**kwargs : dict) -> str :
+        """dinorderquery Method to set a sql query with order conditions
+
+        :param query: sql query
+        :type query: str
+        :return: sql query + order conditions
+        :rtype: str
+        
+        Usage example dinorderquery("Select * from a",column1 = 'ASC', column3 = 'DESC')
+        
+        
+        """
+        query = query + " order by "
+        for column,value in kwargs.items():
+            query = query + column + " " + value + ","
+        return query[:-1]
+        
+
+    def dinfilterqueryand(self, query : str,**kwargs : dict) -> str :
+        """dinfilterqueryand Method to set a sql query with (AND) filtering conditions
+
+        :param query: sql query
+        :type query: str
+        :return: sql query + filter conditions
+        :rtype: str
+
+        Usage example dinfilterqueryand("Select * from a",column1 = '>5 ',column4 = '= \'texttocompair \'')
+
+        """
+        query = "select * from ("+query + ") as a Where "
+        for column,value in kwargs.items():
+            query = query + column + " " + value + "AND "
+        return query[:-4]
+    
+    def dinfilterqueryor(self, query : str,**kwargs : dict) -> str :
+        """dinfilterqueryor Method to set a sql query with (OR) filtering conditions
+
+        :param query: sql query
+        :type query: str
+        :return: sql query + filter conditions
+        :rtype: str
+    
+        Usage example dinfilterqueryand("Select * from a",column1 = '>5 ',column4 = '= \'texttocompair \'')
+        """
+        query = "select * from ("+query + ") as b Where "
+        for column,value in kwargs.items():
+            query = query + column + " " + value + "OR "
+        return query[:-3] 
