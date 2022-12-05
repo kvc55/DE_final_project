@@ -8,7 +8,14 @@ import pandas as pd
 import streamlit as st
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
-from logsetup import log_setup
+# change to the script path
+scriptPath = os.path.realpath(os.path.dirname(sys.argv[0]))
+os.chdir(scriptPath)
+
+# append the relative location to import setup logs
+sys.path.append("../logsetup")
+
+import log_setup
 
 
 logger = log_setup.logging.getLogger(__name__)
