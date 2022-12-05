@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse
 # Logging config
 logging.basicConfig(
     level= logging.INFO,
-    filename='../logs/result.log',
+    filename='../../logs/result.log',
     filemode= 'a',
     datefmt= '%d - %b-%y %H:%M:%S',
     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -29,7 +29,7 @@ async def create_upload_file(file: UploadFile):
         log: success or fail as a logger response.
     '''
     try:
-        folder = '../data'
+        folder = '../../data'
         create_or_exists(folder)
 
         file_location = f"{folder}/{file.filename}" # Save to the 'data' folder.
@@ -53,8 +53,8 @@ async def read_select_dataset(file_name: str):
     '''
 
     try:
-        folder = '../data'
-        folder_temp = '../temp'
+        folder = '../../data'
+        folder_temp = '../../temp'
         # Create folders or check if they already exist..
         create_or_exists(folder)
         create_or_exists(folder_temp)
