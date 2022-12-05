@@ -1,5 +1,7 @@
 import os
+from os import path
 import logging
+import logging.config
 import pandas as pd
 import io
 
@@ -7,13 +9,12 @@ from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
 
 
-# Logging config
-logging.basicConfig(
-    level= logging.INFO,
-    filename='../../logs/result.log',
-    filemode= 'a',
-    datefmt= '%d - %b-%y %H:%M:%S',
-    format='%(asctime)s - %(levelname)s - %(message)s')
+# Load logger config files.
+log_file_path = path.join(path.dirname(path.abspath(__file__)), '../../logs/log_config_file.cfg')
+logging.config.fileConfig(log_file_path)
+
+# Declare logger to be used in this context.
+logger = logging.getLogger('backend')
 
 app = FastAPI()
 
@@ -35,11 +36,11 @@ async def create_upload_file(file: UploadFile):
         file_location = f"{folder}/{file.filename}" # Save to the 'data' folder.
         with open(file_location, "wb+") as file_object:
             file_object.write(file.file.read())
-        logging.info({"info": f"file '{file.filename}' saved at '{file_location}'"})
+        logger.info({"info": f"file '{file.filename}' saved at '{file_location}'"})
         return True
 
     except Exception as e:
-        logging.error({"Error:": f"file '{file.filename}' has not been saved at '{file_location}'. Full error: '{e}'"})
+        logger.error({"Error:": f"file '{file.filename}' has not been saved at '{file_location}'. Full error: '{e}'"})
         return e
 
 # READ FILE
@@ -74,7 +75,7 @@ async def read_select_dataset(file_name: str):
         return FileResponse(path=file_path, filename=file_path, media_type='text')
     
     except Exception as e:
-        logging.error({"Error:": f"failed to read file. Full error: {e}"})
+        logger.error({"Error:": f"failed to read file. Full error: {e}"})
 
 # SPECIFIC METHODS
 def create_or_exists(folder):
