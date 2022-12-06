@@ -80,11 +80,11 @@ class Database():
         print("all rows returned")
 
 
-    def dinorderquery(self, query : str,**kwargs : dict) -> str :
+    def dinorderquery(self, table : str,**kwargs : dict) -> str :
         """dinorderquery Method to set a sql query with order conditions
 
-        :param query: sql query
-        :type query: str
+        :param table: sql query
+        :type table: str
         :return: sql query + order conditions
         :rtype: str
         
@@ -92,39 +92,55 @@ class Database():
         
         
         """
-        query = query + " order by "
+        table = table + " order by "
         for column,value in kwargs.items():
-            query = query + column + " " + value + ","
-        return query[:-1]
+            table = table + column + " " + value + ","
+        return table[:-1]
         
 
-    def dinfilterqueryand(self, query : str,**kwargs : dict) -> str :
+    def dinfilterqueryand(self, table : str,**kwargs : dict) -> str :
         """dinfilterqueryand Method to set a sql query with (AND) filtering conditions
 
-        :param query: sql query
-        :type query: str
+        :param table: sql query
+        :type table: str
         :return: sql query + filter conditions
         :rtype: str
 
         Usage example dinfilterqueryand("Select * from a",column1 = '>5 ',column4 = '= \'texttocompair \'')
 
         """
-        query = "select * from ("+query + ") as a Where "
+        # If the table is the result of a query will add the ()
+        if "select" in table.lower():
+            table = "select * from ("+table + ") as a Where "
+        
+        # If the table is a ddbb table will remove the () chars
+        else:
+            table = "select * from "+table + " as a Where "
+
         for column,value in kwargs.items():
-            query = query + column + " " + value + "AND "
-        return query[:-4]
+            table = table + column + " " + value + "AND "
+        return table[:-4]
     
-    def dinfilterqueryor(self, query : str,**kwargs : dict) -> str :
+    def dinfilterqueryor(self, table : str,**kwargs : dict) -> str :
         """dinfilterqueryor Method to set a sql query with (OR) filtering conditions
 
-        :param query: sql query
-        :type query: str
+        :param table: sql query
+        :type table: str
         :return: sql query + filter conditions
         :rtype: str
     
         Usage example dinfilterqueryand("Select * from a",column1 = '>5 ',column4 = '= \'texttocompair \'')
         """
-        query = "select * from ("+query + ") as b Where "
+
+        
+        # If the table is the result of a query will add the ()
+        if "select" in table.lower():
+            table = "select * from ("+table + ") as b Where "
+        
+        # If the table is a ddbb table will remove the () chars
+        else:
+            table = "select * from "+table + " as b Where "
+
         for column,value in kwargs.items():
-            query = query + column + " " + value + "OR "
-        return query[:-3] 
+            table = table + column + " " + value + "OR "
+        return table[:-3] 
