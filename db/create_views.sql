@@ -59,14 +59,11 @@ ALTER TABLE public.vt_avgreviewbystate OWNER TO postgres;
 --
 
 CREATE VIEW public.vt_avgtimetodeliver AS
- SELECT s.seller_state AS sstate,
-    c.customer_state AS cstate,
-    avg((o.order_delivered_customer_date - o.order_purchase_timestamp)) AS avgdeliverytime
-   FROM (((public.orders o
-     JOIN public.customers c ON (((c.customer_id)::text = (o.customer_id)::text)))
-     JOIN public.order_items oi ON (((oi.order_id)::text = (o.order_id)::text)))
-     JOIN public.sellers s ON (((s.seller_id)::text = (oi.seller_id)::text)))
-  GROUP BY s.seller_state, c.customer_state;
+ select count(o.order_delivered_customer_date),avg(o.order_estimated_delivery_date-o.order_delivered_customer_date),count(o.order_delivered_customer_date)::FLOAT/(select count(order_delivered_customer_date) from orders)::FLOAT as percentimpact 
+from 
+orders o  
+where 
+o.order_estimated_delivery_date < o.order_delivered_customer_date ;
 
 
 ALTER TABLE public.vt_avgtimetodeliver OWNER TO postgres;
@@ -84,7 +81,7 @@ CREATE VIEW public.vt_avgtimetodeliverbtstates AS
      JOIN public.customers c ON (((c.customer_id)::text = (o.customer_id)::text)))
      JOIN public.order_items oi ON (((oi.order_id)::text = (o.order_id)::text)))
      JOIN public.sellers s ON (((s.seller_id)::text = (oi.seller_id)::text)))
-  WHERE ((s.seller_state)::text = (c.customer_state)::text)
+  WHERE ((s.seller_state)::text != (c.customer_state)::text)
   GROUP BY s.seller_state, c.customer_state;
 
 
