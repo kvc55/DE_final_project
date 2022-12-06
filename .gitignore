@@ -128,8 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Ignore data folder.
-data
+# Ignore csv
+*.csv
 
 # Ignore temp folder.
 temp

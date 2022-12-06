@@ -4,7 +4,6 @@ import logging
 import logging.config
 import pandas as pd
 import io
-import pdb
 
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
@@ -77,7 +76,7 @@ async def read_select_dataset(file_name: str):
             f.write(buffer_value)
 
         return FileResponse(path=file_path, filename=file_path, media_type='text')
-    
+
     except Exception as e:
         logger.error({"Error:": f"failed to read file. Full error: {e}"})
 

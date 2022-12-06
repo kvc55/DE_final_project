@@ -1,0 +1,6 @@
+2022-12-06 17:56:33,020 - backend - INFO - {'info': "file 'Estaciones-bicicletas.csv' saved at '../../data/Estaciones-bicicletas.csv'"}
+2022-12-06 17:58:36,982 - backend - INFO - {'info': "file 'testfile.txt' saved at '../../data/testfile.txt'"}
+2022-12-06 18:00:50,426 - backend - ERROR - {'Error:': 'failed to read file. Full error: '}
+2022-12-06 18:00:50,428 - backend - INFO - {'info': "file 'testfile.txt' saved at '../../data/testfile.txt'"}
+2022-12-06 18:01:03,638 - backend - INFO - {'info': "file 'testfile.txt' saved at '../../data/testfile.txt'"}
+2022-12-06 18:01:15,430 - backend - INFO - {'info': "file 'testfile.txt' saved at '../../data/testfile.txt'"}
