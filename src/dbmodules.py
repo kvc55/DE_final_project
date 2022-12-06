@@ -28,7 +28,7 @@ class Database():
         # Create engine and connection
         try:
             self.engine = db.create_engine(f"postgresql://{self.user}:{self.password}@{self.host}/{self.dbname}")
-            connection = self.engine.connect()
+            self.connection = self.engine.connect()
             print("Db instance created")
         except Exception as b:
             print(f"Logged connection error {b}")
@@ -40,7 +40,7 @@ class Database():
         :type t_name: str
         """
         # Run selected query and print all the outputs
-        fetchQuery = connection.execute(f"SELECT * FROM {t_name}")
+        fetchQuery = self.connection.execute(f"SELECT * FROM {t_name}")
         for data in fetchQuery.fetchall():
             print(data)
         print("all rows returned")
@@ -65,3 +65,86 @@ class Database():
         except Exception as a:
             print(f"Error logged {a}")
             return False
+
+
+    def fetchByQuery(self, query: str) -> list:
+        """fetchByQuery Method to print all the rows from a specific query
+
+        :param query: query in sql sintax 
+        :type t_name: str
+        :return: list with all the returned rows
+        :rtype: list
+        """
+        # Run selected query and print all the outputs
+        list_toreturn=[]
+        fetchQuery = self.connection.execute(query)
+        for data in fetchQuery.fetchall():
+            list_toreturn.append(data)
+            print(data)
+        print("all rows returned")
+        return list_toreturn
+
+    def dinorderquery(self, table : str,**kwargs : dict) -> str :
+        """dinorderquery Method to set a sql query with order conditions
+
+        :param table: sql query
+        :type table: str
+        :return: sql query + order conditions
+        :rtype: str
+        
+        Usage example dinorderquery("Select * from a",column1 = 'ASC', column3 = 'DESC')
+        
+        
+        """
+        table = table + " order by "
+        for column,value in kwargs.items():
+            table = table + column + " " + value + ","
+        return table[:-1]
+        
+
+    def dinfilterqueryand(self, table : str,**kwargs : dict) -> str :
+        """dinfilterqueryand Method to set a sql query with (AND) filtering conditions
+
+        :param table: sql query
+        :type table: str
+        :return: sql query + filter conditions
+        :rtype: str
+
+        Usage example dinfilterqueryand("Select * from a",column1 = '>5 ',column4 = '= \'texttocompair \'')
+
+        """
+        # If the table is the result of a query will add the ()
+        if "select" in table.lower():
+            table = "select * from ("+table + ") as a Where "
+        
+        # If the table is a ddbb table will remove the () chars
+        else:
+            table = "select * from "+table + " as a Where "
+
+        for column,value in kwargs.items():
+            table = table + column + " " + value + "AND "
+        return table[:-4]
+    
+    def dinfilterqueryor(self, table : str,**kwargs : dict) -> str :
+        """dinfilterqueryor Method to set a sql query with (OR) filtering conditions
+
+        :param table: sql query
+        :type table: str
+        :return: sql query + filter conditions
+        :rtype: str
+    
+        Usage example dinfilterqueryand("Select * from a",column1 = '>5 ',column4 = '= \'texttocompair \'')
+        """
+
+        
+        # If the table is the result of a query will add the ()
+        if "select" in table.lower():
+            table = "select * from ("+table + ") as b Where "
+        
+        # If the table is a ddbb table will remove the () chars
+        else:
+            table = "select * from "+table + " as b Where "
+
+        for column,value in kwargs.items():
+            table = table + column + " " + value + "OR "
+        return table[:-3] 
