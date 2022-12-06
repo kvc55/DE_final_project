@@ -54,17 +54,19 @@ async def read_select_dataset(file_name: str):
     '''
 
     try:
+        # Create folders unless they already exist.
         folder = '../../data'
         folder_temp = '../../temp'
-        # Create folders or check if they already exist..
         create_or_exists(folder)
         create_or_exists(folder_temp)
 
+        # File paths
         file_path = f"{folder_temp}/info.txt"
         file_location = f"{folder}/{file_name}"
         
         df = pd.read_csv(file_location)
-        
+
+        # Buffer dataframe        
         buffer = io.StringIO()
         df.info(buf=buffer, verbose=True)
         buffer_value = buffer.getvalue()
@@ -79,6 +81,11 @@ async def read_select_dataset(file_name: str):
 
 # SPECIFIC METHODS
 def create_or_exists(folder):
+    '''create_or_exists creates a folder in the file system unless it already exists.
+
+    Args:
+        folder (string): folder to check existence and if not, create it.
+    '''
     # Create folder if it doesn't exist.
     if not os.path.isdir(folder):
         os.mkdir(folder)
