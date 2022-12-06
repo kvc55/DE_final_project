@@ -67,18 +67,22 @@ class Database():
             return False
 
 
-    def fetchByQuery(self, query: str) -> None:
+    def fetchByQuery(self, query: str) -> list:
         """fetchByQuery Method to print all the rows from a specific query
 
         :param query: query in sql sintax 
         :type t_name: str
+        :return: list with all the returned rows
+        :rtype: list
         """
         # Run selected query and print all the outputs
+        list_toreturn=[]
         fetchQuery = self.connection.execute(query)
         for data in fetchQuery.fetchall():
+            list_toreturn.append(data)
             print(data)
         print("all rows returned")
-
+        return list_toreturn
 
     def dinorderquery(self, table : str,**kwargs : dict) -> str :
         """dinorderquery Method to set a sql query with order conditions
