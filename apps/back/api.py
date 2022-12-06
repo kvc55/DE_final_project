@@ -4,6 +4,7 @@ import logging
 import logging.config
 import pandas as pd
 import io
+import pdb
 
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
@@ -29,6 +30,7 @@ async def create_upload_file(file: UploadFile):
     Returns:
         log: success or fail as a logger response.
     '''
+
     try:
         folder = '../../data'
         create_or_exists(folder)
