@@ -34,7 +34,8 @@ async def create_upload_file(file: UploadFile):
         # Raise an error if file extension is NOT .csv
         if file.filename[-4:] != '.csv': 
             raise AssertionError
-
+        
+        # Folder to save the files to:
         folder = '../../data'
         create_or_exists(folder)
 

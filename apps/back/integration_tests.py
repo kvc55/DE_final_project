@@ -4,48 +4,33 @@ import unittest
 import asyncio
 import tempfile
 
-import pdb
-
 import api
 
 from fastapi import UploadFile
 from fastapi.responses import FileResponse
 
-# Read current directory.
 sys.path.append('./')
 
 
-class ApiTests(unittest.TestCase):
-    def test_correct_file_upload(self):
+class MyTests(unittest.TestCase):
+    def test_file_upload_and_read(self):
         # Test file upload initializing the class, adding content and file name.
         test_file = UploadFile
         test_file.file = tempfile.TemporaryFile()
         test_file.filename = "testfile.csv"
         test_file.file.write(b'hello,world')
         test_file.file.seek(0)
-        
-        self.assertEqual(asyncio.run(api.create_upload_file(test_file)), True)
 
-    def test_incorrect_type_file_upload(self):
-        # Test file upload initializing the class, adding content and file name.
-        test_file = UploadFile
-        test_file.file = tempfile.TemporaryFile()
-        test_file.filename = "testfile.txt"
-        test_file.file.write(b'hello,world')
-        test_file.file.seek(0)
-        
-        with self.assertRaises(AssertionError):
-            asyncio.run(api.create_upload_file(test_file))
-    
-    def test_file_read(self):
-        file = 'test_file_to_read.txt'
-        self.assertIsInstance(asyncio.run(api.read_select_dataset(file)), FileResponse)
+        # Write File
+        self.assertEqual(asyncio.run(api.create_upload_file(test_file)), True)
+        # Read file
+        self.assertIsInstance(asyncio.run(api.read_select_dataset(test_file.filename)), FileResponse)
 
 
 # Header to be written at the top of the testing.txt file
 def insert_header(f):
     f.write('\n')
-    f.write('****************** API TESTS ******************')
+    f.write('****************** INTEGRATION TESTS ******************')
     f.write('\n')
     now = datetime.datetime.now()
     date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
@@ -58,9 +43,9 @@ def main(out = sys.stderr, verbosity = 2):
 
     suite = loader.loadTestsFromModule(sys.modules[__name__])
     unittest.TextTestRunner(out, verbosity = verbosity).run(suite)
-    print ('Results logged to root/docs/txt/api-testing.txt')
+    print ('Results logged to root/docs/txt/integration-tests.txt')
 
 if __name__ == '__main__':
-    with open('../../docs/txt/api-testing.txt', 'a') as f:
+    with open('../../docs/txt/integration-tests.txt', 'w') as f:
         f = insert_header(f)
         main(f)
