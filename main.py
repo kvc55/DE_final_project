@@ -1,6 +1,7 @@
 
 import os
 import sys
+from decouple import config
 from src.dbmodules import Database
 import src.etl_to_db as etl
 
@@ -28,10 +29,18 @@ if __name__ == '__main__':
     sellers_filepath = os.path.join(os.path.dirname(__file__), "data", "olist_sellers_dataset.csv")
     logger.debug("End file path settings ")
     logger.debug("Starting db config settings ")
-    user
-    password
-    host
-    dbname
+    # Import from decouple (.ini file) the connection parameters
+    user = config('USER')
+    password = config('PASSWORD')
+    host = config('HOST')
+    dbname = config('DBNAME')
+
+
+
+
+
+
+
     logger.debug("End db config settings ")
 
     # Get dataframes for each file
