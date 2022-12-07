@@ -31,15 +31,23 @@ async def create_upload_file(file: UploadFile):
     '''
 
     try:
+        # Raise an error if file extension is NOT .csv
+        if file.filename[-4:] != '.csv': 
+            raise AssertionError
+
         folder = '../../data'
         create_or_exists(folder)
 
-        file_location = f"{folder}/{file.filename}" # Save to the 'data' folder.
+        # Save to the 'data' folder.
+        file_location = f"{folder}/{file.filename}" 
         with open(file_location, "wb+") as file_object:
             file_object.write(file.file.read())
         logger.info({"info": f"file '{file.filename}' saved at '{file_location}'"})
         return True
-
+    
+    except AssertionError as e:
+        logger.error({"Error:": f"file '{file.filename}' must be type CSV"})
+        raise AssertionError
     except Exception as e:
         logger.error({"Error:": f"file '{file.filename}' has not been saved at '{file_location}'. Full error: '{e}'"})
         return e

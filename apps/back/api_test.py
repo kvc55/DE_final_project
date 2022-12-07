@@ -3,27 +3,36 @@ import sys
 import unittest
 import asyncio
 import tempfile
+import api
 
 
 from fastapi import UploadFile
 from fastapi.responses import FileResponse
 
+# Read current directory.
 sys.path.append('./')
-import api
 
 
-class MyTests(unittest.TestCase):
-    def test_file_upload(self):
-        # Simulate a file upload initializing the class, adding content and file name.
+class ApiTests(unittest.TestCase):
+    def test_correct_file_upload(self):
+        # Test file upload initializing the class, adding content and file name.
+        test_file = UploadFile
+        test_file.file = tempfile.SpooledTemporaryFile("Testing")
+        test_file.filename = "testfile.csv"
+        
+        self.assertEqual(asyncio.run(api.create_upload_file(test_file)), True)
+
+    def test_incorrect_type_file_upload(self):
+        # Test incorrect file upload.
         test_file = UploadFile
         test_file.file = tempfile.SpooledTemporaryFile("Testing")
         test_file.filename = "testfile.txt"
         
-        self.assertEqual(asyncio.run(api.create_upload_file(test_file)), True)
+        with self.assertRaises(AssertionError):
+            asyncio.run(api.create_upload_file(test_file))
     
     def test_file_read(self):
         file = 'test_file_to_read.txt'
-
         self.assertIsInstance(asyncio.run(api.read_select_dataset(file)), FileResponse)
 
 
