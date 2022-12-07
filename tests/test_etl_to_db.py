@@ -1,3 +1,4 @@
+import os
 import sys
 import unittest
 
@@ -43,6 +44,10 @@ class TestETL(unittest.TestCase):
         # Checks returns a dataframe 
         self.assertEqual(type(result), type(pd.DataFrame()))
 
+        # Checks Exception handle
+        with self.assertRaises(Exception):
+            etl.etl_customers()
+            
     def test_etl_geolocation(self) -> None:
         result = etl.etl_geolocation(self.test_csv_geolocation)
 
@@ -61,6 +66,10 @@ class TestETL(unittest.TestCase):
         # Checks not existence of dropped column 
         self.assertNotIn(list(result.columns), ['order_item_id'])
         self.assertEqual(result.shipping_limit_date.dtype, 'datetime64[ns]')
+
+        # Checks Exception handle
+        with self.assertRaises(Exception):
+            etl.etl_order_items()
         
         # Checks returns a dataframe 
         self.assertEqual(type(result), type(pd.DataFrame()))
@@ -73,6 +82,10 @@ class TestETL(unittest.TestCase):
 
         # Checks not existence of dropped column
         self.assertNotIn(list(result.columns), ['payment_sequential'])
+
+        # Checks Exception handle
+        with self.assertRaises(Exception):
+            etl.etl_order_payments()
         
         # Checks returns a dataframe 
         self.assertEqual(type(result), type(pd.DataFrame()))
@@ -89,9 +102,14 @@ class TestETL(unittest.TestCase):
         # Checks type of converted values
         self.assertEqual(result.review_creation_date.dtype, 'datetime64[ns]')
         self.assertEqual(result.review_answer_timestamp.dtype, 'datetime64[ns]')
+
+        # Checks Exception handle
+        with self.assertRaises(Exception):
+            etl.etl_order_review()
         
         # Checks returns a dataframe 
         self.assertEqual(type(result), type(pd.DataFrame()))
+        
 
     def test_etl_orders(self) -> None:
         result = etl.etl_orders(self.test_csv_orders)
@@ -105,6 +123,10 @@ class TestETL(unittest.TestCase):
         self.assertEqual(result.order_delivered_carrier_date.dtype, 'datetime64[ns]')
         self.assertEqual(result.order_delivered_customer_date.dtype, 'datetime64[ns]')
         self.assertEqual(result.order_estimated_delivery_date.dtype, 'datetime64[ns]')
+        
+        # Checks Exception handle
+        with self.assertRaises(Exception):
+            etl.etl_products()
         
         # Checks returns a dataframe 
         self.assertEqual(type(result), type(pd.DataFrame()))
@@ -123,6 +145,10 @@ class TestETL(unittest.TestCase):
         self.assertEqual(result.product_length_cm.dtype, 'int64')
         self.assertEqual(result.product_height_cm.dtype, 'int64')
         self.assertEqual(result.product_width_cm.dtype, 'int64')
+        
+        # Checks Exception handle
+        with self.assertRaises(Exception):
+            etl.etl_products()
         
         # Checks returns a dataframe 
         self.assertEqual(type(result), type(pd.DataFrame()))
