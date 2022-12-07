@@ -44,18 +44,21 @@ class Database():
             logger_r.debug("Conection to Database Failed")
             logger.error(f"Conection to Database Failed - {b}")
 
-    def fetchByTable(self, t_name: str) -> None:
+    def fetchByTable(self, t_name: str) -> list:
         """fetchByTable Method to print all the rows from a specific table
 
         :param t_name: name of the table to be fetched
         :type t_name: str
         """
         # Run selected query and print all the outputs
+        list_toreturn = []
         try:
             fetchQuery = self.connection.execute(f"SELECT * FROM {t_name}")
             for data in fetchQuery.fetchall():
+                list_toreturn.append(data)
                 print(data)
             logger_r.debug("all rows returned")
+            return list_toreturn
         except ProgrammingError as a:
             logger.error(f"Wrong Table Name - {a}")
             logger_r.debug(f"Wrong Table Name - {a}")
@@ -173,3 +176,4 @@ class Database():
             table = table + column + " " + value + "OR "
             logger_r.debug(f"dinfilterqueryor - columns {column} - values {value}")
         return table[:-3]
+
