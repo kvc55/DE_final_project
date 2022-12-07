@@ -3,7 +3,7 @@ import os
 import sys
 
 # change to the script path
-scriptPath = os.path.realpath(os.path.dirname('../frontend/logsetup/'))
+scriptPath = os.path.realpath(os.path.dirname('frontend/logsetup/'))
 os.chdir(scriptPath)
 
 # append the relative location to import setup logs
