@@ -39,7 +39,7 @@ class TestCalculator(unittest.TestCase):
         self.assertNotIn(list(result.columns), ['customer_unique_id'])
         
         # Checks returns a dataframe 
-         self.assertEqual(type(result)), type(pd.DataFrame()))
+        self.assertEqual(type(result)), type(pd.DataFrame()))
 
     def test_etl_geolocation(self) -> None:
         result = etl.etl_geolocation(test_csv_geolocation)
