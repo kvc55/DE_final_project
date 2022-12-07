@@ -1,6 +1,11 @@
+import sys
 import unittest
-from dbmodules import Database
+
 import pandas as pd
+
+sys.path.append('C:/Users/karen/Desktop/final_project/DE_final_project')
+
+from src.dbmodules import Database
 
 class DBmodules(unittest.TestCase):
     """Postgrest test modules."""
@@ -8,36 +13,50 @@ class DBmodules(unittest.TestCase):
     def setUp(self):
         """Setup database connection.
         """
-        #tset test data
-        tablename="customer_id"
+
         #set test parameters of connection
-        user="user"
-        password="password"
+        user="postgres"
+        password="root"
         host="localhost"
-        dbname="database"
+        dbname="test"
 
         db = Database(user,password,host,dbname)
-        test_db= db
-        self.test_db
-        
+        self.test_db= db
+
+    def test_bulkInsert(self):
+        """Test insert table.
+        """
+        dataset = pd.DataFrame({
+            'id': [1, 2, 3],
+            'customer': ['Juan', 'Pedro', 'Maria']
+        })
+        assert self.test_db.bulkInsert(dataset, "id")        
 
     def test_fetchByTable(self):
         """Test fetch table.
         """
-        assert self.test_db.fetchByTable("nombre de tabla")
+        assert self.test_db.fetchByTable("id")
 
-    def bulkInsert(self):
-        """Test insert table.
+    def test_fetchByQuery(self):
+        """Test fetch table.
         """
-        dataset = pd.DataFrame()
-        assert self.test_db.fetchByTable(dataset, "nombre de tabla")
+        assert self.test_db.fetchByQuery("SELECT * FROM id")
 
-    #def tearDown(self):
-        #if self.connection is not None and self.connection.is_connected():
-            #self.connection.close()
+    def test_dinorderquery(self):
+        """Test fetch table.
+        """
+        assert self.test_db.dinorderquery("id", id='ASC')
 
-    #def test_connection(self):
-        #self.assertTrue(self.connection.is_connected())
+    def test_dinfilterqueryand(self):
+        """Test fetch table.
+        """
+        assert self.test_db.dinfilterqueryand("id", id='ASC')
+
+    def test_dinfilterqueryor(self):
+        """Test fetch table.
+        """
+        assert self.test_db.dinfilterqueryor("id", id='ASC')
+
 
 if __name__ == '__main__':
     unittest.main()
