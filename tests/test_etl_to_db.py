@@ -53,7 +53,6 @@ class TestETL(unittest.TestCase):
 
         # Checks total columns
         self.assertEqual((len(result.columns)), 5)
-     
         # Checks returns a dataframe 
         self.assertEqual(type(result), type(pd.DataFrame()))
 

@@ -16,7 +16,6 @@ logger_r = log_setup.logging.getLogger('db')
 class Database():
     """
     Class Database, its used to stabish the connection to the postgresql server
-
     """
 
     def __init__(self, user: str, password: str, host: str, dbname: str) -> object:
@@ -58,7 +57,6 @@ class Database():
             fetchQuery = self.connection.execute(f"SELECT * FROM {t_name}")
             for data in fetchQuery.fetchall():
                 list_toreturn.append(data)
-                print(data)
             logger_r.debug("all rows returned")
             return list_toreturn
         except ProgrammingError as a:
@@ -106,7 +104,6 @@ class Database():
             fetchQuery = self.connection.execute(query)
             for data in fetchQuery.fetchall():
                 list_toreturn.append(data)
-                print(data)
             logger_r.debug("All rows returned")
             return list_toreturn
         except ProgrammingError as a:
