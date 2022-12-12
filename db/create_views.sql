@@ -182,13 +182,13 @@ ALTER TABLE public.vt_itembyorderbystate OWNER TO postgres;
 
 CREATE VIEW public.vt_itemnamesellbystate AS
 select s.seller_state,p.product_category_name, count(oi.order_id) NofSales, 
-( select count(oi.order_id) TotalofSales
+( select count(oi.order_id) statesales
 from 
 order_items oi 
 inner join 
 sellers a  
 on oi.seller_id = a.seller_id  
-where a.seller_state = s.seller_state ) ,
+where a.seller_state = s.seller_state )  ,
 EXTRACT(
     MONTH FROM o.order_purchase_timestamp
     ) AS months,
@@ -434,3 +434,42 @@ on
 o.order_id = or2.order_id 
 group by c.customer_state , months,years  ;
 
+
+
+
+CREATE VIEW public.vt_buybycategorydate AS
+select
+	c.customer_state,
+	p.product_category_name,
+	count(oi.order_id) Nofbuys,
+
+	extract(
+    month
+from
+	o2.order_purchase_timestamp
+    ) as months,
+	extract(
+    year
+from
+	o2.order_purchase_timestamp
+    ) as years
+from
+	products p
+inner join 
+order_items oi  
+on
+	oi.product_id = p.product_id
+inner join orders o2 
+on
+	o2.order_id = oi.order_id
+inner join customers c  
+on
+	c.customer_id = o2.customer_id
+group by
+	p.product_category_name ,
+	c.customer_state,
+	months,
+	years
+order by
+	c.customer_state,
+	Nofbuys desc;
