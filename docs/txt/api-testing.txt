@@ -1,0 +1,11 @@
+
+****************** API TESTS ******************
+12/12/2022, 18:30:36
+test_correct_file_upload (__main__.ApiTests) ... ok
+test_file_read (__main__.ApiTests) ... ok
+test_incorrect_type_file_upload (__main__.ApiTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.015s
+
+OK

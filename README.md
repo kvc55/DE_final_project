@@ -1,19 +1,15 @@
-Installation
-## Activate venv:
-`source bin/activate` (in Ubuntu)
+# Installation
+
+## Set ENV variables
+ROOT_PATH variable must point to the absolute directory of this repository.
 
 ## Install requirements:
 `pip install -r requirements.txt`
 
 <br>
 
-# Execute
-### Move to the /page folder: 
-`cd page`
+# Execution
 
 ### (FastAPI) Run in the local server: 
 `uvicorn api:app --reload`
-
-### (Streamlit) Run in the l: 
-`streamlit run main_page.py`
 
