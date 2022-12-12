@@ -181,18 +181,33 @@ ALTER TABLE public.vt_itembyorderbystate OWNER TO postgres;
 --
 
 CREATE VIEW public.vt_itemnamesellbystate AS
- SELECT s.seller_state,
-    p.product_category_name,
-    count(oi.order_id) AS nofsales,
-    ( SELECT count(oi_1.order_id) AS totalofsales
-           FROM (public.order_items oi_1
-             JOIN public.sellers a ON (((oi_1.seller_id)::text = (a.seller_id)::text)))
-          WHERE ((a.seller_state)::text = (s.seller_state)::text)) AS totalofsales
-   FROM ((public.products p
-     JOIN public.order_items oi ON (((oi.product_id)::text = (p.product_id)::text)))
-     JOIN public.sellers s ON (((s.seller_id)::text = (oi.seller_id)::text)))
-  GROUP BY p.product_category_name, s.seller_state
-  ORDER BY s.seller_state, (count(oi.order_id)) DESC;
+select s.seller_state,p.product_category_name, count(oi.order_id) NofSales, 
+( select count(oi.order_id) TotalofSales
+from 
+order_items oi 
+inner join 
+sellers a  
+on oi.seller_id = a.seller_id  
+where a.seller_state = s.seller_state ) ,
+EXTRACT(
+    MONTH FROM o.order_purchase_timestamp
+    ) AS months,
+EXTRACT(
+    YEAR FROM o.order_purchase_timestamp
+    ) AS years
+  
+
+from 
+products p  
+inner join 
+order_items oi  
+on oi.product_id = p.product_id  
+inner join sellers s  
+on s.seller_id = oi.seller_id  
+inner join orders o 
+on oi.order_id = o.order_id 
+group by p.product_category_name ,s.seller_state,years,months 
+order by s.seller_state,NofSales DESC;
 
 
 ALTER TABLE public.vt_itemnamesellbystate OWNER TO postgres;
