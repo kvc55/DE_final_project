@@ -395,9 +395,23 @@ CREATE VIEW public.vt_totalavgtimetodeliver AS
 
 ALTER TABLE public.vt_totalavgtimetodeliver OWNER TO postgres;
 
--- Completed on 2022-12-06 10:48:13
 
---
--- PostgreSQL database dump complete
---
+CREATE VIEW public.vt_buybydate AS
+select 
+EXTRACT(
+    MONTH FROM o.order_purchase_timestamp
+    ) AS months,
+EXTRACT(
+    YEAR FROM o.order_purchase_timestamp
+    ) AS years
+
+,count(oi.product_id) nofproducts,sum(oi.price) subtotalprice,sum(oi.freight_value) subtotalreight,c.customer_state from
+orders o 
+inner join customers c 
+on c.customer_id = o.customer_id 
+inner join 
+order_items oi 
+on
+oi.order_id = o.order_id 
+group by c.customer_state , months,years ;
 
