@@ -181,18 +181,33 @@ ALTER TABLE public.vt_itembyorderbystate OWNER TO postgres;
 --
 
 CREATE VIEW public.vt_itemnamesellbystate AS
- SELECT s.seller_state,
-    p.product_category_name,
-    count(oi.order_id) AS nofsales,
-    ( SELECT count(oi_1.order_id) AS totalofsales
-           FROM (public.order_items oi_1
-             JOIN public.sellers a ON (((oi_1.seller_id)::text = (a.seller_id)::text)))
-          WHERE ((a.seller_state)::text = (s.seller_state)::text)) AS totalofsales
-   FROM ((public.products p
-     JOIN public.order_items oi ON (((oi.product_id)::text = (p.product_id)::text)))
-     JOIN public.sellers s ON (((s.seller_id)::text = (oi.seller_id)::text)))
-  GROUP BY p.product_category_name, s.seller_state
-  ORDER BY s.seller_state, (count(oi.order_id)) DESC;
+select s.seller_state,p.product_category_name, count(oi.order_id) NofSales, 
+( select count(oi.order_id) statesales
+from 
+order_items oi 
+inner join 
+sellers a  
+on oi.seller_id = a.seller_id  
+where a.seller_state = s.seller_state )  ,
+EXTRACT(
+    MONTH FROM o.order_purchase_timestamp
+    ) AS months,
+EXTRACT(
+    YEAR FROM o.order_purchase_timestamp
+    ) AS years
+  
+
+from 
+products p  
+inner join 
+order_items oi  
+on oi.product_id = p.product_id  
+inner join sellers s  
+on s.seller_id = oi.seller_id  
+inner join orders o 
+on oi.order_id = o.order_id 
+group by p.product_category_name ,s.seller_state,years,months 
+order by s.seller_state,NofSales DESC;
 
 
 ALTER TABLE public.vt_itemnamesellbystate OWNER TO postgres;
@@ -395,9 +410,78 @@ CREATE VIEW public.vt_totalavgtimetodeliver AS
 
 ALTER TABLE public.vt_totalavgtimetodeliver OWNER TO postgres;
 
--- Completed on 2022-12-06 10:48:13
 
---
--- PostgreSQL database dump complete
---
+CREATE VIEW public.vt_buybydate AS
+select 
+EXTRACT(
+    MONTH FROM o.order_purchase_timestamp
+    ) AS months,
+EXTRACT(
+    YEAR FROM o.order_purchase_timestamp
+    ) AS years
 
+,count(oi.product_id) nofproducts,sum(oi.price) subtotalprice,sum(oi.freight_value) subtotalreight,avg(review_score) avgreviews,count(review_comment_message) nofreviews,c.customer_state from
+orders o 
+inner join customers c 
+on c.customer_id = o.customer_id 
+inner join 
+order_items oi 
+on
+oi.order_id = o.order_id 
+left join 
+order_reviews or2 
+on
+o.order_id = or2.order_id 
+group by c.customer_state , months,years  ;
+
+
+
+
+CREATE VIEW public.vt_buybycategorydate AS
+select
+	c.customer_state,
+	p.product_category_name,
+	count(oi.order_id) Nofbuys,
+
+	extract(
+    month
+from
+	o2.order_purchase_timestamp
+    ) as months,
+	extract(
+    year
+from
+	o2.order_purchase_timestamp
+    ) as years
+from
+	products p
+inner join 
+order_items oi  
+on
+	oi.product_id = p.product_id
+inner join orders o2 
+on
+	o2.order_id = oi.order_id
+inner join customers c  
+on
+	c.customer_id = o2.customer_id
+group by
+	p.product_category_name ,
+	c.customer_state,
+	months,
+	years
+order by
+	c.customer_state,
+	Nofbuys desc;
+
+
+CREATE VIEW public.vt_topbuybycategorystatedate AS
+select vt_buybycategorydate.customer_state,vt_buybycategorydate.product_category_name,vt_buybycategorydate.months,vt_buybycategorydate.years,vt_buybycategorydate.nofbuys from vt_buybycategorydate 
+inner join 
+(select ranked_scores.* from 
+(select tabla.*, 
+rank() OVER (PARTITION BY customer_state ORDER BY nofbuys DESC) 
+from (select customer_state,product_category_name,sum(nofbuys) as nofbuys from vt_buybycategorydate group by customer_state,product_category_name) as tabla) ranked_scores 
+where rank < 6  order by customer_state) as ranking_table 
+on ranking_table.customer_state = vt_buybycategorydate.customer_state and ranking_table.product_category_name = vt_buybycategorydate.product_category_name; 
+ 

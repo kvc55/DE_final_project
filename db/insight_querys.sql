@@ -409,3 +409,58 @@ on
 o.order_id = or2.order_id 
 
 group by s.seller_state
+
+
+-- metrics by date
+select 
+EXTRACT(
+    MONTH FROM o.order_purchase_timestamp
+    ) AS months,
+EXTRACT(
+    YEAR FROM o.order_purchase_timestamp
+    ) AS years
+
+,count(oi.product_id) nofproducts,sum(oi.price) subtotalprice,sum(oi.freight_value) subtotalreight,avg(review_score) avgreviews,count(review_comment_message) nofreviews,c.customer_state from
+orders o 
+inner join customers c 
+on c.customer_id = o.customer_id 
+inner join 
+order_items oi 
+on
+oi.order_id = o.order_id 
+left join 
+order_reviews or2 
+on
+o.order_id = or2.order_id 
+group by c.customer_state , months,years 
+
+
+-- amount of sales by products category,state and date
+
+select s.seller_state,p.product_category_name, count(oi.order_id) NofSales, 
+( select count(oi.order_id) TotalofSales
+from 
+order_items oi 
+inner join 
+sellers a  
+on oi.seller_id = a.seller_id  
+where a.seller_state = s.seller_state ) ,
+EXTRACT(
+    MONTH FROM o.order_purchase_timestamp
+    ) AS months,
+EXTRACT(
+    YEAR FROM o.order_purchase_timestamp
+    ) AS years
+  
+
+from 
+products p  
+inner join 
+order_items oi  
+on oi.product_id = p.product_id  
+inner join sellers s  
+on s.seller_id = oi.seller_id  
+inner join orders o 
+on oi.order_id = o.order_id 
+group by p.product_category_name ,s.seller_state,years,months 
+order by s.seller_state,NofSales DESC
