@@ -29,8 +29,6 @@ class DBmodules(unittest.TestCase):
             'customer_unique_id': [1, 2, 3],
             'customer_city': ['rio de janeiro', 'sao paulo', 'brasilia']
         })
-
-        self.test_db= db
  
     def test_bulkInsert(self):
         """Test insert table.
