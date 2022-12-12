@@ -1,4 +1,16 @@
 import pandas as pd
+import os
+import sys
+
+scriptPath = os.path.realpath(os.path.dirname('frontend/logsetup/'))
+if scriptPath not in sys.path:
+    sys.path.append(scriptPath)
+
+sys.path.append('../frontend')
+import frontend.logsetup.log_setup as log_setup
+
+logger = log_setup.logging.getLogger(__name__)
+logger_r = log_setup.logging.getLogger('db')
 
 
 def etl_customers(filepath: str) -> object:
@@ -9,9 +21,17 @@ def etl_customers(filepath: str) -> object:
     :return: processed Dataframe
     :rtype: object
     """
-    df_customers = pd.read_csv(filepath)
-    df_customers.drop('customer_unique_id', axis=1, inplace=True)
-    return df_customers
+    try:
+        df_customers = pd.read_csv(filepath)
+        logger_r.debug(f"File {filepath} open succesfully ")
+        df_customers.drop('customer_unique_id', axis=1, inplace=True)
+        return df_customers
+    except IOError:
+        logger_r.debug(f"File {filepath} cant be opened ")
+        logger.error(f"File {filepath} cant be opened ")
+    except Exception as a:
+        logger_r.debug(f"File {filepath} format its not what was expected {a}")
+        logger.error(f"File {filepath} format its not what was expected  {a}")             
 
 
 def etl_geolocation(filepath: str) -> object:
@@ -22,9 +42,13 @@ def etl_geolocation(filepath: str) -> object:
     :return: processed Dataframe
     :rtype: object
     """
-
-    df_geolocation = pd.read_csv(filepath)
-    return df_geolocation
+    try:
+        df_geolocation = pd.read_csv(filepath)
+        logger_r.debug(f"File {filepath} open succesfully ")
+        return df_geolocation
+    except IOError:
+        logger_r.debug(f"File {filepath} cant be opened ")
+        logger.error(f"File {filepath} cant be opened ")        
 
 
 def etl_order_items(filepath: str) -> object:
@@ -35,12 +59,19 @@ def etl_order_items(filepath: str) -> object:
     :return: processed Dataframe
     :rtype: object
     """
-
-    df_order_items = pd.read_csv(filepath)
-    df_order_items.drop('order_item_id', axis=1, inplace=True)
-    df_order_items['shipping_limit_date'] = pd.to_datetime(df_order_items[
-        'shipping_limit_date'], infer_datetime_format=True)
-    return df_order_items
+    try:
+        df_order_items = pd.read_csv(filepath)
+        logger_r.debug(f"File {filepath} open succesfully ")
+        df_order_items.drop('order_item_id', axis=1, inplace=True)
+        df_order_items['shipping_limit_date'] = pd.to_datetime(df_order_items[
+            'shipping_limit_date'], infer_datetime_format=True)
+        return df_order_items
+    except IOError:
+        logger_r.debug(f"File {filepath} cant be opened ")
+        logger.error(f"File {filepath} cant be opened ")        
+    except Exception as a:
+        logger_r.debug(f"File {filepath} format its not what was expected {a}")
+        logger.error(f"File {filepath} format its not what was expected  {a}")             
 
 
 def etl_order_payments(filepath: str) -> object:
@@ -52,10 +83,17 @@ def etl_order_payments(filepath: str) -> object:
     :rtype: object
     """
 
-    df_order_payments = pd.read_csv(filepath)
-    df_order_payments.drop('payment_sequential', axis=1, inplace=True)
-
-    return df_order_payments
+    try:
+        df_order_payments = pd.read_csv(filepath)
+        df_order_payments.drop('payment_sequential', axis=1, inplace=True)
+        logger_r.debug(f"File {filepath} open succesfully ")
+        return df_order_payments
+    except IOError:
+        logger_r.debug(f"File {filepath} cant be opened ")
+        logger.error(f"File {filepath} cant be opened ")        
+    except Exception as a:
+        logger_r.debug(f"File {filepath} format its not what was expected {a}")
+        logger.error(f"File {filepath} format its not what was expected  {a}")    
 
 
 def etl_order_review(filepath: str) -> object:
@@ -67,15 +105,22 @@ def etl_order_review(filepath: str) -> object:
     :rtype: object
     """
 
-    df_order_reviews = pd.read_csv(filepath)
-    df_order_reviews.drop('review_comment_title', axis=1, inplace=True)
-    df_order_reviews['review_creation_date'] = pd.to_datetime(
-        df_order_reviews['review_creation_date'], format='%Y-%m-%d %H:%M:%S')
-    df_order_reviews['review_answer_timestamp'] = pd.to_datetime(
-        df_order_reviews['review_answer_timestamp'],
-        infer_datetime_format=True)
-    return df_order_reviews
-
+    try:
+        df_order_reviews = pd.read_csv(filepath)
+        df_order_reviews.drop('review_comment_title', axis=1, inplace=True)
+        df_order_reviews['review_creation_date'] = pd.to_datetime(
+            df_order_reviews['review_creation_date'], format='%Y-%m-%d %H:%M:%S')
+        df_order_reviews['review_answer_timestamp'] = pd.to_datetime(
+            df_order_reviews['review_answer_timestamp'],
+            infer_datetime_format=True)
+        logger_r.debug(f"File {filepath} open succesfully ")
+        return df_order_reviews
+    except IOError:
+        logger_r.debug(f"File {filepath} cant be opened ")
+        logger.error(f"File {filepath} cant be opened ")        
+    except Exception as a:
+        logger_r.debug(f"File {filepath} format its not what was expected {a}")
+        logger.error(f"File {filepath} format its not what was expected  {a}")    
 
 def etl_orders(filepath: str) -> object:
     """etl_customers ETL to process orders csv
@@ -85,19 +130,26 @@ def etl_orders(filepath: str) -> object:
     :return: processed Dataframe
     :rtype: object
     """
-
-    df_orders = pd.read_csv(filepath)
-    df_orders['order_purchase_timestamp'] = pd.to_datetime(df_orders[
-        'order_purchase_timestamp'], format='%Y-%m-%d %H:%M:%S')
-    df_orders['order_approved_at'] = pd.to_datetime(df_orders[
-        'order_approved_at'], format='%Y-%m-%d %H:%M:%S')
-    df_orders['order_delivered_carrier_date'] = pd.to_datetime(df_orders[
-        'order_delivered_carrier_date'], format='%Y-%m-%d %H:%M:%S')
-    df_orders['order_delivered_customer_date'] = pd.to_datetime(df_orders[
-        'order_delivered_customer_date'], format='%Y-%m-%d %H:%M:%S')
-    df_orders['order_estimated_delivery_date'] = pd.to_datetime(df_orders[
-        'order_estimated_delivery_date'], format='%Y-%m-%d %H:%M:%S')
-    return df_orders
+    try:
+        df_orders = pd.read_csv(filepath)
+        df_orders['order_purchase_timestamp'] = pd.to_datetime(df_orders[
+            'order_purchase_timestamp'], format='%Y-%m-%d %H:%M:%S')
+        df_orders['order_approved_at'] = pd.to_datetime(df_orders[
+            'order_approved_at'], format='%Y-%m-%d %H:%M:%S')
+        df_orders['order_delivered_carrier_date'] = pd.to_datetime(df_orders[
+            'order_delivered_carrier_date'], format='%Y-%m-%d %H:%M:%S')
+        df_orders['order_delivered_customer_date'] = pd.to_datetime(df_orders[
+            'order_delivered_customer_date'], format='%Y-%m-%d %H:%M:%S')
+        df_orders['order_estimated_delivery_date'] = pd.to_datetime(df_orders[
+            'order_estimated_delivery_date'], format='%Y-%m-%d %H:%M:%S')
+        logger_r.debug(f"File {filepath} open succesfully ")
+        return df_orders
+    except IOError:
+        logger_r.debug(f"File {filepath} cant be opened ")
+        logger.error(f"File {filepath} cant be opened ")        
+    except Exception as a:
+        logger_r.debug(f"File {filepath} format its not what was expected {a}")
+        logger.error(f"File {filepath} format its not what was expected  {a}")    
 
 
 def etl_products(filepath: str) -> object:
@@ -108,25 +160,31 @@ def etl_products(filepath: str) -> object:
     :return: processed Dataframe
     :rtype: object
     """
-
-    df_products = pd.read_csv(filepath)
-    df_products.fillna('-1', inplace=True)
-    df_products['product_name_lenght'] = df_products[
-        'product_name_lenght'].astype('int64')
-    df_products['product_description_lenght'] = df_products[
-        'product_description_lenght'].astype('int64')
-    df_products['product_photos_qty'] = df_products[
-        'product_photos_qty'].astype('int64')
-    df_products['product_weight_g'] = df_products[
-        'product_weight_g'].astype('int64')
-    df_products['product_length_cm'] = df_products[
-        'product_length_cm'].astype('int64')
-    df_products['product_height_cm'] = df_products[
-        'product_height_cm'].astype('int64')
-    df_products['product_width_cm'] = df_products[
-        'product_width_cm'].astype('int64')
-
-    return df_products
+    try:
+        df_products = pd.read_csv(filepath)
+        df_products.fillna('-1', inplace=True)
+        df_products['product_name_lenght'] = df_products[
+            'product_name_lenght'].astype('int64')
+        df_products['product_description_lenght'] = df_products[
+            'product_description_lenght'].astype('int64')
+        df_products['product_photos_qty'] = df_products[
+            'product_photos_qty'].astype('int64')
+        df_products['product_weight_g'] = df_products[
+            'product_weight_g'].astype('int64')
+        df_products['product_length_cm'] = df_products[
+            'product_length_cm'].astype('int64')
+        df_products['product_height_cm'] = df_products[
+            'product_height_cm'].astype('int64')
+        df_products['product_width_cm'] = df_products[
+            'product_width_cm'].astype('int64')
+        logger_r.debug(f"File {filepath} open succesfully ")
+        return df_products
+    except IOError:
+        logger_r.debug(f"File {filepath} cant be opened ")
+        logger.error(f"File {filepath} cant be opened ")        
+    except Exception as a:
+        logger_r.debug(f"File {filepath} format its not what was expected {a}")
+        logger.error(f"File {filepath} format its not what was expected  {a}")    
 
 
 def etl_sellers(filepath: str) -> object:
@@ -137,6 +195,10 @@ def etl_sellers(filepath: str) -> object:
     :return: processed Dataframe
     :rtype: object
     """
-
-    df_order_sellers = pd.read_csv(filepath)
-    return df_order_sellers
+    try:
+        df_order_sellers = pd.read_csv(filepath)
+        logger_r.debug(f"File {filepath} open succesfully ")
+        return df_order_sellers
+    except IOError:
+        logger_r.debug(f"File {filepath} cant be opened ")
+        logger.error(f"File {filepath} cant be opened ") 
