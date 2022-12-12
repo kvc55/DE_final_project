@@ -1,10 +1,15 @@
 import sys
+import os
 import unittest
 
 import pandas as pd
 
-# sys.path.append('C :/Users/karen/Desktop/final_project/DE_final_project')
-sys.path.append('/home/cratag/dev/DE_final_project')
+# Import ENV variables.
+from dotenv import load_dotenv, find_dotenv
+load_dotenv (find_dotenv('../config/.env'))
+
+# Declare root path: pulled from ENV file.
+sys.path.append(os.getenv("ROOT_PATH"))
 
 from src.dbmodules import Database
 
@@ -15,7 +20,7 @@ class DBmodules(unittest.TestCase):
         """Setup database connection.
         """
 
-        #set test parameters of connection
+        # Set test parameters of connection
         user="postgres"
         password="postgres"
         host="localhost:5433"

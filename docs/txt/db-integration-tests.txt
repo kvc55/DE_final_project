@@ -1,10 +1,10 @@
 
 ****************** DATABASE INTEGRATION TESTS ******************
-12/12/2022, 16:50:05
+12/12/2022, 19:01:24
 test_all_dataset_integrity_and_db_modules (__main__.DBTest)
 Test you can connect + use modules + all datasets integrity (DB ETL): ... ok
 
 ----------------------------------------------------------------------
-Ran 1 test in 0.129s
+Ran 1 test in 0.118s
 
 OK

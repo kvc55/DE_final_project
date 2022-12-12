@@ -10,7 +10,7 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv (find_dotenv('../config/.env'))
 
 # Declare root path: pulled from ENV file.
-sys.path.append(os.getenv('ROOT_PATH'))
+sys.path.append(os.getenv("ROOT_PATH"))
 
 # Modules to test
 from src.dbmodules import Database
@@ -211,7 +211,7 @@ def main(out = sys.stderr, verbosity = 2):
 
     suite = loader.loadTestsFromModule(sys.modules[__name__])
     unittest.TextTestRunner(out, verbosity = verbosity).run(suite)
-    print ('Results logged to root/docs/txt/db-integration-tests.txt')
+    print (f'Results logged to {os.getenv("ROOT_PATH")}/docs/txt/db-integration-tests.txt')
 
 if __name__ == '__main__':
     with open('../docs/txt/db-integration-tests.txt', 'w') as f:

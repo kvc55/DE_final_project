@@ -47,9 +47,9 @@ def main(out = sys.stderr, verbosity = 2):
 
     suite = loader.loadTestsFromModule(sys.modules[__name__])
     unittest.TextTestRunner(out, verbosity = verbosity).run(suite)
-    print (f'Results logged to {os.getenv("ROOT_PATH")}/docs/txt/integration-tests.txt')
+    print (f'Results logged to {os.getenv("ROOT_PATH")}/docs/txt/api-integration-tests.txt')
 
 if __name__ == '__main__':
-    with open(f'{os.getenv("ROOT_PATH")}/docs/txt/integration-tests.txt', 'w') as f:
+    with open(f'{os.getenv("ROOT_PATH")}/docs/txt/api-integration-tests.txt', 'w') as f:
         f = insert_header(f)
         main(f)

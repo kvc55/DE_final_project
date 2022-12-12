@@ -1,11 +1,11 @@
-import logging
-import logging.config
+import os
 from os import path
 
-# logging configuration
-logs_file_path = path.join(
-    path.dirname(
-        path.abspath(__file__)),
-    'log_config_file.cfg')
+import logging
+import logging.config
 
-logging.config.fileConfig(logs_file_path)
+# Import ENV variables.
+from dotenv import load_dotenv, find_dotenv
+load_dotenv (find_dotenv('../config/.env'))
+
+logging.config.fileConfig(f'{os.getenv("ROOT_PATH")}/logs/log_config_file.cfg')
