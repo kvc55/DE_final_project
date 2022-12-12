@@ -473,3 +473,15 @@ group by
 order by
 	c.customer_state,
 	Nofbuys desc;
+
+
+CREATE VIEW public.vt_topbuybycategorystatedate AS
+select vt_buybycategorydate.customer_state,vt_buybycategorydate.product_category_name,vt_buybycategorydate.months,vt_buybycategorydate.years,vt_buybycategorydate.nofbuys from vt_buybycategorydate 
+inner join 
+(select ranked_scores.* from 
+(select tabla.*, 
+rank() OVER (PARTITION BY customer_state ORDER BY nofbuys DESC) 
+from (select customer_state,product_category_name,sum(nofbuys) as nofbuys from vt_buybycategorydate group by customer_state,product_category_name) as tabla) ranked_scores 
+where rank < 6  order by customer_state) as ranking_table 
+on ranking_table.customer_state = vt_buybycategorydate.customer_state and ranking_table.product_category_name = vt_buybycategorydate.product_category_name; 
+ 
