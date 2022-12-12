@@ -5,9 +5,11 @@ import os
 
 import pandas as pd
 
+# Import ENV variables.
 from dotenv import load_dotenv, find_dotenv
 load_dotenv (find_dotenv('../config/.env'))
-# Root path
+
+# Declare root path: pulled from ENV file.
 sys.path.append(os.getenv('ROOT_PATH'))
 
 # Modules to test
