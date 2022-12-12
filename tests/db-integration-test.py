@@ -55,6 +55,7 @@ class DBTest(unittest.TestCase):
             5. Filter queries (and)
             6. Filter queries (or)
         """
+        
         # -- DATASETS -- #
 
         # CUSTOMERS DATASET
@@ -176,8 +177,15 @@ class DBTest(unittest.TestCase):
         # 6. Filter queries (or)
         assert self.test_db.dinfilterqueryor("id", id='ASC')
 
-# Header to be written at the top of the testing.txt file
 def insert_header(f):
+    '''insert_header: Header to be written at the top of the testing.txt file
+
+    Args:
+        f (file): file to insert content to.
+
+    Returns:
+        file: file with header content. 
+    '''
     f.write('\n')
     f.write('****************** DATABASE INTEGRATION TESTS ******************')
     f.write('\n')
@@ -188,6 +196,12 @@ def insert_header(f):
     return f
 
 def main(out = sys.stderr, verbosity = 2):
+    '''main creates file with Unittest logs.
+
+    Args:
+        out: File object used by the interpreter for ins, outs and errors. Defaults to sys.stderr (errors).
+        verbosity (int): Verbosity is the error level for outputting logs. Defaults to 2.
+    '''
     loader = unittest.TestLoader()
 
     suite = loader.loadTestsFromModule(sys.modules[__name__])
