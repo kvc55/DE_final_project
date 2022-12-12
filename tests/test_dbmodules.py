@@ -3,7 +3,8 @@ import unittest
 
 import pandas as pd
 
-sys.path.append('C:/Users/karen/Desktop/final_project/DE_final_project')
+# sys.path.append('C :/Users/karen/Desktop/final_project/DE_final_project')
+sys.path.append('/home/cratag/dev/DE_final_project')
 
 from src.dbmodules import Database
 
@@ -16,8 +17,8 @@ class DBmodules(unittest.TestCase):
 
         #set test parameters of connection
         user="postgres"
-        password="root"
-        host="localhost"
+        password="postgres"
+        host="localhost:5433"
         dbname="test"
 
         db = Database(user,password,host,dbname)

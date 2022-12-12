@@ -1,6 +1,5 @@
 import sqlalchemy as db
 
-
 class Database():
     """
     Class Database, its used to stabish the connection to the postgresql server

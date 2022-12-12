@@ -1,0 +1,8 @@
+<class 'pandas.core.frame.DataFrame'>
+Index: 0 entries
+Data columns (total 1 columns):
+ #   Column                  Non-Null Count  Dtype 
+---  ------                  --------------  ----- 
+ 0   successfully read file  0 non-null      object
+dtypes: object(1)
+memory usage: 0.0+ bytes

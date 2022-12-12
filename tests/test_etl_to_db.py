@@ -4,7 +4,7 @@ import unittest
 
 import pandas as pd
 
-sys.path.append('C:/Users/karen/Desktop/final_project/DE_final_project')
+sys.path.append('/home/cratag/dev/DE_final_project')
 
 import src.etl_to_db as etl
 
