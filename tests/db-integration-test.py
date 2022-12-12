@@ -1,11 +1,14 @@
 import sys
 import unittest
 import datetime
+import os 
 
 import pandas as pd
 
+from dotenv import load_dotenv, find_dotenv
+load_dotenv (find_dotenv('../config/.env'))
 # Root path
-sys.path.append('/home/cratag/dev/DE_final_project')
+sys.path.append(os.getenv('ROOT_PATH'))
 
 # Modules to test
 from src.dbmodules import Database
