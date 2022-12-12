@@ -405,7 +405,7 @@ EXTRACT(
     YEAR FROM o.order_purchase_timestamp
     ) AS years
 
-,count(oi.product_id) nofproducts,sum(oi.price) subtotalprice,sum(oi.freight_value) subtotalreight,c.customer_state from
+,count(oi.product_id) nofproducts,sum(oi.price) subtotalprice,sum(oi.freight_value) subtotalreight,avg(review_score) avgreviews,count(review_comment_message) nofreviews,c.customer_state from
 orders o 
 inner join customers c 
 on c.customer_id = o.customer_id 
@@ -413,5 +413,9 @@ inner join
 order_items oi 
 on
 oi.order_id = o.order_id 
-group by c.customer_state , months,years ;
+left join 
+order_reviews or2 
+on
+o.order_id = or2.order_id 
+group by c.customer_state , months,years  ;
 
