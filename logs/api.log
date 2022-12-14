@@ -26,3 +26,4 @@
 2022-12-14T09:35:51-0300 - backend - INFO - {'info': "file 'testfile.csv' saved at '../../data/testfile.csv'"}
 2022-12-14T09:35:51-0300 - backend - ERROR - {'Error:': "file 'testfile.txt' must be type CSV"}
 2022-12-14T09:42:23-0300 - backend - INFO - {'info': "file 'testfile.csv' saved at '../../data/testfile.csv'"}
+2022-12-14T11:34:13-0300 - backend - INFO - {'info': "file 'testfile.csv' saved at '../../data/testfile.csv'"}

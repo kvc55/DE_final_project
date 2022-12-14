@@ -1,9 +1,10 @@
-The project was a request from the CEO's secretary.
+## About the Project
+This project was a direct request from the CEO's secretary.
 We were asked to develop a technological solution for management decision-making using the datadriven concept.
 
-To do this, access to the documents used by various areas of the company was requested. It was possible to catalog 9 csv documents, of which 8 could be used for this development.
+To do this, access to the documents used by various areas of the company was requested. It was possible to catalog 9 csv documents, of which **8 could be used for this development**.
 
-We developed:
+### What was developed:
 - A web platform for online consultation of said documents with a friendly graphical environment for the end user
 - A database in PostgresSQL
 - A class in python to communicate with the database and methods that allow to execute dynamic queries without requiring great knowledge in SQL
@@ -15,42 +16,36 @@ To populate the database, modules were designed in python that execute a CSV tra
 
 ----------------------------------------------
 
-Repository map:
+### Repository map:
 
-/db               < folder: contains sql files
-/frontend         < folder: contains streamlit/fastapi files and logging configuration
-/notebooks        < folder: contains jupyter notebooks
-/src              < folder: contains .py modules 
-README.md         < file  : contains use instructions 
-main.py           < file  : python file to execute all the steps to populate the ddbb 
-requeriments.txt  < file: has all the python required packages to install
-
-
-/frontend/logsetup/    < folder : contains logging configuration
-/frontend/pages        < folder : contains streamlit python files
-
-
-
+**/db** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains sql files  
+**/frontend**         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains streamlit/fastapi files and logging configuration  
+**/notebooks**        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains jupyter notebooks  
+**/src**              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains .py modules   
+**README.md**         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< file  : contains use instructions   
+**main.py**           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< file  : python file to execute all the steps to populate the ddbb   
+**requeriments.txt**  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< file: has all the python required packages to install  
+**/frontend/logsetup/**    &nbsp;< folder : contains logging configuration  
+**/frontend/pages**        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder : contains streamlit python files
 
 -----------------------
-/db/create_tables.sql  < file: Sql scripts to create the ddbb 
-/db/insight_querys.sql < file: usefull sql querys to use
-/db/create_views.sql   < file: Sql scripts to create the views
+**/db/create_tables.sql**  &nbsp;&nbsp;< file: Sql scripts to create the ddbb   
+**/db/insight_querys.sql** < file: usefull sql querys to use   
+**/db/create_views.sql**   &nbsp;&nbsp;&nbsp;< file: Sql scripts to create the views   
 
 -----------------------
-/notebooks/eda_prechecks.ipynb     < file: jupyter notebook with the analysis done to the CSV files before of the ddbb creation to understand the data on those files
-/notebooks/ddbb_analysis.ipynb     < file: jupyter notebook with the analysis done to decide the ddbb structure
-/notebooks/insights_analysis.ipynb < file: jupyter notebook with partial insights analysis and some other usefull information
+**/notebooks/eda_prechecks.ipynb**     &nbsp;&nbsp;&nbsp;< file: jupyter notebook with the analysis done to the CSV files before of the ddbb creation to understand the data on those files  
+**/notebooks/ddbb_analysis.ipynb**     &nbsp;&nbsp;&nbsp;&nbsp;< file: jupyter notebook with the analysis done to decide the ddbb structure  
+**/notebooks/insights_analysis.ipynb** < file: jupyter notebook with partial insights analysis and some other usefull information
 
 -----------------------
-/src/dbmodules.py   < file: python file with class and methods for ddbb connection and manipulation  
-/src/etl_to_db.py   < file: python file with functions to execute the csv loading and the data transformations
+**/src/dbmodules.py**   < file: python file with class and methods for ddbb connection and manipulation   
+**/src/etl_to_db.py**   &nbsp;&nbsp;&nbsp;< file: python file with functions to execute the csv loading and the data transformations  
 
 
--------- INSTALATION PROCEDURE ---------------
-1) Create a python virtual enviroment (required python 3.9)
+# Installation
+1) Create a [Python virtual enviroment using venv](https://docs.python.org/3/library/venv.html) (Python >3.x required)
 
-Installation
 ## Activate venv:
 `source bin/activate` (in Ubuntu)
 
