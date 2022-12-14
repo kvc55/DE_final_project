@@ -103,6 +103,10 @@ def select_file(data_path: str) -> str:
     """
 
     file_list = [f for f in listdir(data_path) if isfile(join(data_path, f))]
+    st.markdown(
+        """**Pick a dataset**
+        """
+    )
     option = st.selectbox('**Pick a dataset**', file_list)
     file_location = os.path.join(data_path, option)
 
@@ -126,9 +130,9 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         want_drop_nulls = st.checkbox("**Drop null values**")
 
         if want_drop_nulls:
-            to_drop_nulls = st.multiselect("Select columns", df.columns)
+            to_drop_nulls = st.multiselect("**Select columns**", df.columns)
 
-            drop_button = st.button('Apply')
+            drop_button = st.button('**Apply**')
             if drop_button:
                 filtered_df.dropna(subset=to_drop_nulls, inplace=True)
 

@@ -4,7 +4,7 @@ import urllib.request
 import streamlit as st
 import hydralit_components as hc
 
-from page_one import put_image
+#from page_one import put_image
 from page_two import create_page_two
 from page_three import show_graphs
 
@@ -17,7 +17,7 @@ st.set_page_config(layout='wide')
 
 # specify the primary menu definition
 menu_data = [
-    {'icon': "🏠", 'label':"Home"},
+    #{'icon': "🏠", 'label':"Home"},
     {'icon': "📚",'label':"Project"},
     {'icon': "📊", 'label':"Charts"},
 ]
@@ -62,9 +62,9 @@ change_footer = """
 st.markdown(change_footer, unsafe_allow_html=True)
 
 
-if menu_id == 'Home':
-    put_image()
-elif menu_id == 'Project':
+#if menu_id == 'Home':
+    #put_image()
+if menu_id == 'Project':
     create_page_two()
 elif menu_id == 'Charts':
     show_graphs()
