@@ -67,3 +67,6 @@ watchdog==2.1.9
 watchfiles==0.18.1
 websockets==10.4
 zipp==3.11.0
+psycopg2==2.9.5
+SQLAlchemy==1.4.44
+python-dotenv==0.21.0
