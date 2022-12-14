@@ -4,7 +4,8 @@ import unittest
 
 import pandas as pd
 
-sys.path.append('/home/cratag/dev/DE_final_project')
+# Declare root path: pulled from ENV file.
+sys.path.append(os.getenv("ROOT_PATH"))
 
 import src.etl_to_db as etl
 
