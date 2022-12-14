@@ -11,13 +11,27 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
 # change to the script path
-scriptPath = os.path.realpath(os.path.dirname('.'))
-os.chdir(scriptPath)
+#scriptPath = os.path.realpath(os.path.dirname('.'))
+#os.chdir(scriptPath)
 
-# append the relative location to import setup logs
-sys.path.append("./logsetup")
+from dotenv import load_dotenv, find_dotenv
+load_dotenv (find_dotenv('../config/.env'))
+
+
+
+
+scriptPath = os.path.realpath(os.path.dirname(f'{os.getenv("ROOT_PATH")}/frontend/logsetup/'))
+if scriptPath not in sys.path:
+    sys.path.append(scriptPath)
 
 import log_setup
+
+
+
+# append the relative location to import setup logs
+#sys.path.append("./logsetup")
+
+
 
 
 logger = log_setup.logging.getLogger(__name__)

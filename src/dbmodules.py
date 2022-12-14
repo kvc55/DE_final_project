@@ -5,9 +5,7 @@ from sqlalchemy.exc import ProgrammingError
 scriptPath = os.path.realpath(os.path.dirname('frontend/logsetup/'))
 if scriptPath not in sys.path:
     sys.path.append(scriptPath)
-
-sys.path.append('../frontend')
-import frontend.logsetup.log_setup as log_setup
+import log_setup
 
 logger = log_setup.logging.getLogger(__name__)
 logger_r = log_setup.logging.getLogger('db')
@@ -20,7 +18,6 @@ class Database():
 
     def __init__(self, user: str, password: str, host: str, dbname: str) -> object:
         """__init__ Instance method to create a database object
-
         :param user: ddbb username
         :type user: str
         :param password: ddbb password
@@ -47,7 +44,6 @@ class Database():
 
     def fetchByTable(self, t_name: str) -> list:
         """fetchByTable Method to print all the rows from a specific table
-
         :param t_name: name of the table to be fetched
         :type t_name: str
         """
@@ -66,7 +62,6 @@ class Database():
 
     def bulkInsert(self, dfname: object, t_name: str) -> bool:
         """bulkInsert Method to bulk insert a dataframe into a table
-
         :param dfname: dataframe that contains the data to insert
         :type dfname: object
         :param t_name: table name that is going to be used to insert
@@ -93,7 +88,6 @@ class Database():
 
     def fetchByQuery(self, query: str) -> list:
         """fetchByQuery Method to print all the rows from a specific query
-
         :param query: query in sql sintax 
         :type t_name: str
         :return: list with all the returned rows
@@ -114,15 +108,11 @@ class Database():
 
     def dinorderquery(self, table: str, **kwargs: dict) -> str:
         """dinorderquery Method to set a sql query with order conditions
-
         :param table: sql query
         :type table: str
         :return: sql query + order conditions
         :rtype: str
-
         Usage example dinorderquery("Select * from a",column1 = 'ASC', column3 = 'DESC')
-
-
         """
         table = table + " order by "
         for column, value in kwargs.items():
@@ -132,14 +122,11 @@ class Database():
 
     def dinfilterqueryand(self, table: str, **kwargs: dict) -> str:
         """dinfilterqueryand Method to set a sql query with (AND) filtering conditions
-
         :param table: sql query
         :type table: str
         :return: sql query + filter conditions
         :rtype: str
-
         Usage example dinfilterqueryand("Select * from a",column1 = '>5 ',column4 = '= \'texttocompair \'')
-
         """
         # If the table is the result of a query will add the ()
         if "select" in table.lower():
@@ -156,12 +143,10 @@ class Database():
 
     def dinfilterqueryor(self, table: str, **kwargs: dict) -> str:
         """dinfilterqueryor Method to set a sql query with (OR) filtering conditions
-
         :param table: sql query
         :type table: str
         :return: sql query + filter conditions
         :rtype: str
-
         Usage example dinfilterqueryor("Select * from a",column1 = '>5 ',column4 = '= \'texttocompair \'')
         """
 

@@ -1,4 +1,3 @@
-
 import os
 import sys
 from dotenv import load_dotenv
@@ -13,7 +12,13 @@ if scriptPath not in sys.path:
 import log_setup
 
 dotenv_path = join(os.path.dirname(__file__),"config", '.env')
+
+
 load_dotenv(dotenv_path)
+
+
+
+
 
 logger = log_setup.logging.getLogger(__name__)
 
@@ -60,6 +65,9 @@ if __name__ == '__main__':
     logger.debug("End etl processes ")
 
     # Create Database object to manage database connections
+    
+    
+    
     db = Database(user, password, host, dbname)
     logger.debug("Start data bulk into de db ")
     db.bulkInsert(df_customers, "customers")
