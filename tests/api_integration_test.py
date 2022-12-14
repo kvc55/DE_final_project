@@ -34,7 +34,7 @@ class MyTests(unittest.TestCase):
 # Header to be written at the top of the testing.txt file
 def insert_header(f):
     f.write('\n')
-    f.write('****************** INTEGRATION TESTS ******************')
+    f.write('****************** API INTEGRATION TESTS ******************')
     f.write('\n')
     now = datetime.datetime.now()
     date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
