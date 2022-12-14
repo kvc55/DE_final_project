@@ -21,10 +21,10 @@ class DBmodules(unittest.TestCase):
         """
 
         # Set test parameters of connection
-        user="postgres"
-        password="postgres"
-        host="localhost:5433"
-        dbname="test"
+        user = os.getenv('USER')
+        password = os.getenv('PASSWORD')
+        host = os.getenv('HOST')
+        dbname = os.getenv('DBNAME')
 
         db = Database(user,password,host,dbname)
         self.test_db= db

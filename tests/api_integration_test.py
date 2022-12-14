@@ -14,6 +14,7 @@ load_dotenv (find_dotenv('../config/.env'))
 
 # Read backend directory and import API.
 sys.path.append(f'{os.getenv("ROOT_PATH")}/apps/back/')
+
 import api 
 
 class MyTests(unittest.TestCase):

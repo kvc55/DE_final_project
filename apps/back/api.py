@@ -12,19 +12,12 @@ import io
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
 
-
-# Load logger config files.
-#log_file_path = path.join(path.dirname(path.abspath(__file__)), f'{os.getenv("ROOT_PATH")}/logs/log_config_file.cfg')
-#logging.config.fileConfig(log_file_path)
-
-
 scriptPath = os.path.realpath(os.path.dirname('frontend/logsetup/'))
-print(scriptPath)
 if scriptPath not in sys.path:
     sys.path.append(scriptPath)
 import log_setup
 
-#dotenv_path = join(os.path.dirname(__file__),"config", '.env')
+
 
 
 logger = log_setup.logging.getLogger(__name__)
