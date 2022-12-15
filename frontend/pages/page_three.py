@@ -106,8 +106,3 @@ def show_graphs():
     st.altair_chart(c, use_container_width=False)
 
     #st.line_chart(data=mean_price_year, x='year', y='mean_price')
-
-
-
-
-   
