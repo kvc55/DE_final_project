@@ -10,14 +10,12 @@ import streamlit as st
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
-# change to the script path
-scriptPath = os.path.realpath(os.path.dirname('.'))
-os.chdir(scriptPath)
+scriptPath = os.path.realpath(os.path.dirname('frontend/logsetup/'))
 
-# append the relative location to import setup logs
-sys.path.append("./logsetup")
-
+if scriptPath not in sys.path:
+    sys.path.append(scriptPath)
 import log_setup
+
 
 
 logger = log_setup.logging.getLogger(__name__)
