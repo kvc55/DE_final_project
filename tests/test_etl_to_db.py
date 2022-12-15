@@ -35,6 +35,8 @@ class TestETL(unittest.TestCase):
         self.test_csv_sellers = TEST_INPUT_DIR + test_file_sellers
 
     def test_etl_customers(self) -> None:
+        """Test ETL customers transformations.
+        """
         result = etl.etl_customers(self.test_csv_customer)
 
         # Checks total columns 
@@ -51,14 +53,19 @@ class TestETL(unittest.TestCase):
             etl.etl_customers()
             
     def test_etl_geolocation(self) -> None:
+        """Test ETL geolocation transformations.
+        """
         result = etl.etl_geolocation(self.test_csv_geolocation)
 
         # Checks total columns
         self.assertEqual((len(result.columns)), 5)
+     
         # Checks returns a dataframe 
         self.assertEqual(type(result), type(pd.DataFrame()))
 
     def test_etl_order_items(self) -> None:
+        """Test ETL order items transformations.
+        """
         result = etl.etl_order_items(self.test_csv_items)
 
         # Checks total columns
@@ -76,6 +83,8 @@ class TestETL(unittest.TestCase):
         self.assertEqual(type(result), type(pd.DataFrame()))
 
     def test_etl_order_payments(self) -> None:
+        """Test ETL order payments transformations.
+        """
         result = etl.etl_order_payments(self.test_csv_payments)
 
         # Checks total columns
@@ -92,6 +101,8 @@ class TestETL(unittest.TestCase):
         self.assertEqual(type(result), type(pd.DataFrame()))
 
     def test_etl_order_review(self) -> None:
+        """Test ETL orders reviews transformations.
+        """
         result = etl.etl_order_review(self.test_csv_reviews)
 
         # Checks total columns 
@@ -106,6 +117,7 @@ class TestETL(unittest.TestCase):
 
         # Checks Exception handle
         with self.assertRaises(Exception):
+
             etl.etl_order_review()
         
         # Checks returns a dataframe 
@@ -113,6 +125,8 @@ class TestETL(unittest.TestCase):
         
 
     def test_etl_orders(self) -> None:
+        """Test ETL orders transformations.
+        """
         result = etl.etl_orders(self.test_csv_orders)
 
         # Checks total colummns
@@ -133,6 +147,8 @@ class TestETL(unittest.TestCase):
         self.assertEqual(type(result), type(pd.DataFrame()))
 
     def test_etl_products(self) -> None:
+        """Test ETL products transformations.
+        """
         result = etl.etl_products(self.test_csv_products)
 
         # Checks total columns
@@ -155,6 +171,8 @@ class TestETL(unittest.TestCase):
         self.assertEqual(type(result), type(pd.DataFrame()))
 
     def test_etl_sellers(self) -> None:
+        """Test ETL sellers transformations.
+        """
         result = etl.etl_sellers(self.test_csv_sellers)
 
         # Checks total columns 
