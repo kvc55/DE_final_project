@@ -1,3 +1,4 @@
+# Tesseract: Data Analysis for Brazilian E-Commerce Olist
 ## About the Project
 This project was a direct request from the CEO's secretary.
 We were asked to develop a technological solution for management decision-making using the datadriven concept.
