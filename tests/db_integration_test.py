@@ -22,7 +22,7 @@ class DBTest(unittest.TestCase):
         """ Load data setUp once for this class"""
 
         # CSV datasets to populate DB.
-        TEST_INPUT_DIR = 'data_input/'
+        TEST_INPUT_DIR = f'{os.getenv("ROOT_PATH")}/tests/data_input/'
         test_file_customer =  'olist_customers_dataset.csv'
         test_file_geolocation =  'olist_geolocation_dataset.csv'
         test_file_items =  'olist_order_items_dataset.csv'

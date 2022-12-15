@@ -26,7 +26,7 @@ def show_graphs():
     c = alt.Chart(
         top_10_customer_state,
         width=1000
-    ).mark_bar(color='#57B97C').encode(
+    ).mark_bar().encode(
         x=alt.X('customer_state', sort='-y'),
         y=alt.Y('total')
     
@@ -94,7 +94,7 @@ def show_graphs():
     c = alt.Chart(
         mean_price_year,
         width=1000
-    ).mark_line(color='#57B97C').encode(
+    ).mark_line().encode(
         x=alt.X('year'),
         y=alt.Y('mean_price')
         #color=alt.Color('IMDB_Rating:Q')
@@ -106,8 +106,3 @@ def show_graphs():
     st.altair_chart(c, use_container_width=False)
 
     #st.line_chart(data=mean_price_year, x='year', y='mean_price')
-
-
-
-
-   
