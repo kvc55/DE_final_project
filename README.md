@@ -61,7 +61,16 @@ To populate the database, modules were designed in python that execute a CSV tra
 ## Install requirements:
 `pip install -r requirements.txt`
 
-<br>
+
+## ENV Configuration variables:
+
+- USER=**  
+- PASSWORD=**  
+- HOST=**  
+- DBNAME=**  
+- ROOT_PATH=**   
+
+<ins>Ask a member of Tesseract to provide you with the actual credentials.</ins>
 
 # Execution
 
