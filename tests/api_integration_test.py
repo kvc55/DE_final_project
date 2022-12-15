@@ -14,6 +14,7 @@ load_dotenv (find_dotenv('../config/.env'))
 
 # Read backend directory and import API.
 sys.path.append(f'{os.getenv("ROOT_PATH")}/apps/back/')
+
 import api 
 
 class MyTests(unittest.TestCase):
@@ -21,7 +22,7 @@ class MyTests(unittest.TestCase):
         # Test file upload initializing the class, adding content and file name.
         test_file = UploadFile
         test_file.file = tempfile.TemporaryFile()
-        test_file.filename = "testfile.csv"
+        test_file.filename = "olist_customers_dataset.csv"
         test_file.file.write(b'hello,world')
         test_file.file.seek(0)
 

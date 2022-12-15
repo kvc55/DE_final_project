@@ -1,24 +1,33 @@
 import os
 from os import path
-
+import sys
 import logging
 import logging.config
 import pandas as pd
 import io
 
-from dotenv import load_dotenv, find_dotenv
-load_dotenv (find_dotenv('../config/.env'))
+#from dotenv import load_dotenv, find_dotenv
+#load_dotenv (find_dotenv('../config/.env'))
 
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
 
+scriptPath = os.path.realpath(os.path.dirname('frontend/logsetup/'))
+if scriptPath not in sys.path:
+    sys.path.append(scriptPath)
+import log_setup
 
-# Load logger config files.
-log_file_path = path.join(path.dirname(path.abspath(__file__)), f'{os.getenv("ROOT_PATH")}/logs/log_config_file.cfg')
-logging.config.fileConfig(log_file_path)
+
+
+
+logger = log_setup.logging.getLogger(__name__)
+
+
+
+
 
 # Declare logger to be used in this context.
-logger = logging.getLogger('backend')
+#logger = logging.getLogger('backend')
 
 app = FastAPI()
 

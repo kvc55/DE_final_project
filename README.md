@@ -18,29 +18,38 @@ To populate the database, modules were designed in python that execute a CSV tra
 
 ### Repository map:
 
-**/db** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains sql files  
-**/frontend**         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains streamlit/fastapi files and logging configuration  
-**/notebooks**        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains jupyter notebooks  
-**/src**              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains .py modules   
-**README.md**         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< file  : contains use instructions   
-**main.py**           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< file  : python file to execute all the steps to populate the ddbb   
-**requeriments.txt**  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< file: has all the python required packages to install  
-**/frontend/logsetup/**    &nbsp;< folder : contains logging configuration  
-**/frontend/pages**        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder : contains streamlit python files
+**/app** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains backend files.  
+**/data** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains uploaded CSV and fetchable datasets.  
+**/db** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains SQL files.  
+**/docs/txt**  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains test results in TXT format.  
+**/frontend**         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains Streamlit and FastAPI files and log config.  
+**/notebooks**        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains Jupyter Notebook.  
+**/src**              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains Python modules for DB methods and ETL.  
+**/temp**              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder: contains temporary files with module outputs.      
+**main.py**           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< file  : Python file to execute all the steps to populate the ddbb.   
+**requeriments.txt**  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< file: has all the Python required packages to install.   
+**README.md**         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< file  : contains use instructions.  
 
 -----------------------
-**/db/create_tables.sql**  &nbsp;&nbsp;< file: Sql scripts to create the ddbb   
-**/db/insight_querys.sql** < file: usefull sql querys to use   
-**/db/create_views.sql**   &nbsp;&nbsp;&nbsp;< file: Sql scripts to create the views   
+**/frontend/logsetup/**    &nbsp;< folder : contains logging configuration.  
+**/frontend/pages**        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< folder : contains Streamlit Python files. 
 
 -----------------------
-**/notebooks/eda_prechecks.ipynb**     &nbsp;&nbsp;&nbsp;< file: jupyter notebook with the analysis done to the CSV files before of the ddbb creation to understand the data on those files  
-**/notebooks/ddbb_analysis.ipynb**     &nbsp;&nbsp;&nbsp;&nbsp;< file: jupyter notebook with the analysis done to decide the ddbb structure  
-**/notebooks/insights_analysis.ipynb** < file: jupyter notebook with partial insights analysis and some other usefull information
+**/apps/back/api**    &nbsp;< folder : Python API module. Sets endpoints for uploading and fetching data.  
 
 -----------------------
-**/src/dbmodules.py**   < file: python file with class and methods for ddbb connection and manipulation   
-**/src/etl_to_db.py**   &nbsp;&nbsp;&nbsp;< file: python file with functions to execute the csv loading and the data transformations  
+**/db/create_tables.sql**  &nbsp;&nbsp;&nbsp;< file: SQL scripts to create the DB.     
+**/db/insight_querys.sql** < file: insight SQL queries.   
+**/db/create_views.sql**   &nbsp;&nbsp;&nbsp;< file: SQL scripts to create views.   
+
+-----------------------
+**/notebooks/eda_prechecks.ipynb**     &nbsp;&nbsp;&nbsp;< file: Jupyter Notebook with the analysis done to the CSV files before database creation to understand the data on those files.  
+**/notebooks/ddbb_analysis.ipynb**     &nbsp;&nbsp;&nbsp;&nbsp;< file: Jupyter Notebook with analysis done to decide the databse structure.  
+**/notebooks/insights_analysis.ipynb** < file: Jupyter Notebook with partial insights, analysis and useful information.
+
+-----------------------
+**/src/dbmodules.py**   < file: Python file with class and methods for DB connection and manipulation.   
+**/src/etl_to_db.py**   &nbsp;&nbsp;&nbsp;< file: Python file with functions to execute the CSV loading and the data transformation.  
 
 
 # Installation
@@ -59,7 +68,7 @@ To populate the database, modules were designed in python that execute a CSV tra
 ### (FastAPI) Run in the local server: 
 `uvicorn api:app --reload`
 
-### (Streamlit) Run in the l: 
+### (Streamlit) Run in the instance: 
 `streamlit run main_page.py`
 
 2) Create database

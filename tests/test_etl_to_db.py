@@ -5,16 +5,17 @@ import unittest
 import pandas as pd
 
 # Declare root path: pulled from ENV file.
-sys.path.append(os.getenv("ROOT_PATH"))
+sys.path.append(".")
+from src import etl_to_db as etl
 
-import src.etl_to_db as etl
+
 
 
 class TestETL(unittest.TestCase):
 
     def setUp(self) -> None:
         """ Load data setUp """
-        TEST_INPUT_DIR = 'data_input/'
+        TEST_INPUT_DIR = f'{os.getenv("ROOT_PATH")}/tests/data_input/'
         test_file_customer =  'olist_customers_dataset.csv'
         test_file_geolocation =  'olist_geolocation_dataset.csv'
         test_file_items =  'olist_order_items_dataset.csv'

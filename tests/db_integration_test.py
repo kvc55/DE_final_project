@@ -42,10 +42,16 @@ class DBTest(unittest.TestCase):
         cls.test_csv_sellers = TEST_INPUT_DIR + test_file_sellers
         
         # DB parameters of connection
-        user="postgres"
-        password="postgres"
-        host="localhost:5433"
-        dbname="test"
+        user = os.getenv('USER')
+        password = os.getenv('PASSWORD')
+        host = os.getenv('HOST')
+        dbname = os.getenv('DBNAME')
+        
+        
+        #user="postgres"
+        #password="postgres"
+        #host="localhost:5433"
+        #dbname="test"
 
         db = Database(user,password,host,dbname)
         cls.test_db = db
@@ -214,6 +220,6 @@ def main(out = sys.stderr, verbosity = 2):
     print (f'Results logged to {os.getenv("ROOT_PATH")}/docs/txt/db-integration-tests.txt')
 
 if __name__ == '__main__':
-    with open('../docs/txt/db-integration-tests.txt', 'w') as f:
+    with open(f'{os.getenv("ROOT_PATH")}/docs/txt/db-integration-tests.txt', 'w') as f:
         f = insert_header(f)
         main(f)

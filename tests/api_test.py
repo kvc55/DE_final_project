@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse
 
 # Import ENV variables.
 from dotenv import load_dotenv, find_dotenv
-load_dotenv (find_dotenv('../config/.env'))
+load_dotenv(find_dotenv('../config/.env'))
 
 # Read backend directory and import API.
 sys.path.append(f'{os.getenv("ROOT_PATH")}/apps/back/')
